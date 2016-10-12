@@ -1,0 +1,12 @@
+<svg width="25px" height="25px" viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs></defs>
+    <g id="Tablet" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="02-Teachers" transform="translate(-533.000000, -67.000000)" fill="#000000">
+            <g id="header">
+                <g id="particles" transform="translate(133.000000, 67.000000)">
+                    <path d="M400.5,0.5 L424.5,0.5 L424.5,24.5 C411.3,24.5 400.5,13.7 400.5,0.5 L400.5,0.5 Z" id="particle-teacher-4"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
