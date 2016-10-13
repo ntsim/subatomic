@@ -1,7 +1,9 @@
+import raf from 'raf';
 import Subatomic from './Subatomic';
 import SubatomicDOM from './SubatomicDOM';
 import ImageLoader from './image/ImageLoader';
-import 'whatwg-fetch';
+
+raf.polyfill();
 
 const subatomicDOM = new SubatomicDOM();
 const imageLoader = new ImageLoader();

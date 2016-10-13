@@ -43,7 +43,7 @@ export default class SubatomicDOM {
         return this;
     }
 
-    private onResize(e) {
+    private onResize(e: Event) {
         for (let id in this.instances) {
             if (!this.instances.hasOwnProperty(id)) {
                 continue;

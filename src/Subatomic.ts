@@ -28,7 +28,7 @@ export default class Subatomic {
         this.rootEl.appendChild(this.canvas.element);
 
         // Make sure to load in any specified images
-        this.config.shapes.forEach(shape => {
+        this.config.shapes.forEach((shape) => {
             if (shape.type === 'image') {
                 const image = <ImageSetting> shape;
                 this.imageLoader.loadImage(image.src);

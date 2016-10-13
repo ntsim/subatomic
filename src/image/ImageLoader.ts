@@ -6,10 +6,10 @@ export default class ImageLoader {
     svgs: { [src: string]: Svg } = {};
     renderedImages: { [src: string]: HTMLElement } = {};
 
-    private _requestCount = 0;
-    private _requestsDone = 0;
-    private _errorCount = 0;
-    private _rendered = 0;
+    private _requestCount: number = 0;
+    private _requestsDone: number = 0;
+    private _errorCount: number = 0;
+    private _rendered: number = 0;
 
     constructor(srcs: string[] = []) {
         srcs.forEach(this.loadImage);
@@ -23,15 +23,15 @@ export default class ImageLoader {
         }
     }
 
-    get requestCount() {
+    get requestCount(): number {
         return this._requestCount;
     }
 
-    get requestsDone() {
+    get requestsDone(): number {
         return this._requestsDone;
     }
 
-    get errorCount() {
+    get errorCount(): number {
         return this._errorCount;
     }
 
@@ -55,7 +55,7 @@ export default class ImageLoader {
         });
     }
 
-    private onSvgLoaded(src: string) {
+    private onSvgLoaded(src: string): void {
         const xhr = this.requests[src];
 
         if (xhr.readyState !== 4) {
