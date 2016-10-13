@@ -1,78 +1,103 @@
 import Svg from './Svg';
 
-export default class ImageLoader {
+export class ImageLoader {
     requests: { [src: string]: XMLHttpRequest } = {};
     errors: { [src: string]: string } = {};
     svgs: { [src: string]: Svg } = {};
     renderedImages: { [src: string]: HTMLElement } = {};
 
-    private _requestCount: number = 0;
-    private _requestsDone: number = 0;
-    private _errorCount: number = 0;
-    private _rendered: number = 0;
+    private isReady: boolean = false;
+    private requestCount: number = 0;
+    private requestsDone: number = 0;
+    private errorCount: number = 0;
+    private rendered: number = 0;
 
     constructor(srcs: string[] = []) {
-        srcs.forEach(this.loadImage);
+        this.loadImages(srcs);
     }
 
-    loadImage(src: string): void {
+    /**
+     * @param srcs to obtain the images
+     * @param callback for after all images have been loaded
+     */
+    loadImages(srcs: string[], callback?: () => void): void {
+        srcs.forEach(src =>
+            this.loadImage(src, () => this.onImageLoaded(callback))
+        );
+    }
+
+    /**
+     * @param src URL to obtain the image
+     * @param callback for after the image has been loaded
+     */
+    loadImage(src: string, callback?: () => void): void {
+        this.isReady = false;
+
         if (src.indexOf('svg') > -1) {
-            this.loadSvg(src);
+            this.loadSvg(src, callback);
         } else {
             this.renderImage(src);
         }
     }
 
-    get requestCount(): number {
-        return this._requestCount;
-    }
-
-    get requestsDone(): number {
-        return this._requestsDone;
-    }
-
-    get errorCount(): number {
-        return this._errorCount;
-    }
-
-    private loadSvg(src: string): void {
+    private loadSvg(src: string, callback?: () => void): void {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', src);
-        xhr.onreadystatechange = this.onSvgLoaded.bind(this, src);
+        xhr.onreadystatechange = this.onXhrComplete.bind(this, src, callback);
 
-        this._requestCount++;
+        this.requestCount++;
         this.requests[src] = xhr;
 
         xhr.send();
     }
 
-    private renderImage(src: string): void {
+    private renderImage(src: string, callback?: () => void): void {
         const image = new Image();
         image.src = src;
         image.addEventListener('load', () => {
-            this._rendered++;
+            this.rendered++;
             this.renderedImages[src] = image;
+
+            if (typeof callback === 'function') {
+                callback();
+            }
         });
     }
 
-    private onSvgLoaded(src: string): void {
+    private onXhrComplete(src: string, callback?: () => void): void {
         const xhr = this.requests[src];
 
         if (xhr.readyState !== 4) {
             return;
         }
 
-        this._requestsDone++;
+        this.requestsDone++;
 
         if (xhr.status !== 200) {
             console.log(`Error loading image from src: ${src}`);
 
-            this._errorCount++;
+            this.errorCount++;
             this.errors[src] = xhr.statusText;
 
             return;
         }
 
         this.svgs[src] = new Svg(xhr.responseText);
+
+        if (typeof callback === 'function') {
+            callback();
+        }
+    }
+
+    private onImageLoaded(callback?: () => void): void {
+        if (this.requestCount !== this.requestsDone) {
+            return;
+        }
+
+        this.isReady = true;
+
+        if (typeof callback === 'function') {
+            callback();
+        }
     }
 }

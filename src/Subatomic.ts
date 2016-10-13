@@ -1,14 +1,14 @@
-import Canvas from './Canvas';
+import { Canvas } from './Canvas';
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import ImageSetting = SubatomicConfig.ImageSetting;
-import ImageLoader from './image/ImageLoader';
+import { ImageLoader } from './image/ImageLoader';
 
-export default class Subatomic {
+export class Subatomic {
     id: string;
     rootEl: HTMLElement;
-    config: SubatomicConfig.Root;
     canvas: Canvas;
     imageLoader: ImageLoader;
+    readonly config: SubatomicConfig.Root;
 
     constructor(
         id: string = 'subatomic-container',
@@ -24,15 +24,20 @@ export default class Subatomic {
         this.init();
     }
 
-    init(): void {
+    private init(): void {
         this.rootEl.appendChild(this.canvas.element);
 
-        // Make sure to load in any specified images
-        this.config.shapes.forEach((shape) => {
-            if (shape.type === 'image') {
+        const srcs = this.config.shapes
+            .filter(shape => shape.type === 'image')
+            .map(shape => {
                 const image = <ImageSetting> shape;
-                this.imageLoader.loadImage(image.src);
-            }
-        });
+                return image.src;
+            });
+
+        this.imageLoader.loadImages(srcs, this.onImagesLoaded);
+    }
+
+    private onImagesLoaded(): void {
+
     }
 }

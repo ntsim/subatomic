@@ -1,4 +1,4 @@
-export default class Canvas {
+export class Canvas {
     private _element: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
 

@@ -1,9 +1,9 @@
-import Subatomic from './Subatomic';
+import { Subatomic } from './Subatomic';
 
 /**
  * The SubatomicDOM acts to provide convenience tracking of all instances of Subatomic on the page.
  */
-export default class SubatomicDOM {
+export class SubatomicDOM {
     private instances: {
         [id: string]: Subatomic;
     };
@@ -49,7 +49,7 @@ export default class SubatomicDOM {
                 continue;
             }
 
-            const instance = this.instances[id];
+            // const instance = this.instances[id];
         }
     }
 }
