@@ -1,13 +1,18 @@
 import { Canvas } from './Canvas';
+import { ImageLoader } from './image/ImageLoader';
+import { Particle } from './particle/Particle';
+import { ParticleGenerator } from './particle/ParticleGenerator';
+
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import ImageSetting = SubatomicConfig.ImageSetting;
-import { ImageLoader } from './image/ImageLoader';
 
 export class Subatomic {
     id: string;
     rootEl: HTMLElement;
     canvas: Canvas;
     imageLoader: ImageLoader;
+    particles: Particle[] = [];
+
     readonly config: SubatomicConfig.Root;
 
     constructor(
@@ -34,10 +39,26 @@ export class Subatomic {
                 return image.src;
             });
 
-        this.imageLoader.loadImages(srcs, this.onImagesLoaded);
+        if (srcs.length === 0) {
+            this.beginRender();
+
+            return;
+        }
+
+        // Render the canvas after images have loaded
+        this.imageLoader.loadImages(srcs, this.beginRender.bind(this));
     }
 
-    private onImagesLoaded(): void {
+    private beginRender() {
+        this.canvas.clear();
+        this.canvas.paint();
 
+        this.config.shapes.forEach((shape) => {
+            const particles = ParticleGenerator.generateForShape(shape, this.canvas);
+
+            console.log('GENERATED PARTICLES => ', particles);
+
+            this.particles.concat(particles);
+        });
     }
 }

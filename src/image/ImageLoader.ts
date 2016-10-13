@@ -6,11 +6,9 @@ export class ImageLoader {
     svgs: { [src: string]: Svg } = {};
     renderedImages: { [src: string]: HTMLElement } = {};
 
-    private isReady: boolean = false;
+    private ready: boolean = false;
     private requestCount: number = 0;
     private requestsDone: number = 0;
-    private errorCount: number = 0;
-    private rendered: number = 0;
 
     constructor(srcs: string[] = []) {
         this.loadImages(srcs);
@@ -31,13 +29,26 @@ export class ImageLoader {
      * @param callback for after the image has been loaded
      */
     loadImage(src: string, callback?: () => void): void {
-        this.isReady = false;
+        this.ready = false;
+        this.requestCount++;
 
         if (src.indexOf('svg') > -1) {
             this.loadSvg(src, callback);
         } else {
-            this.renderImage(src);
+            this.renderImage(src, callback);
         }
+    }
+
+    get svgCount(): number {
+        return Object.keys(this.svgs).length;
+    }
+
+    get renderedCount(): number {
+        return Object.keys(this.renderedImages).length;
+    }
+
+    get errorCount(): number {
+        return Object.keys(this.errors).length;
     }
 
     private loadSvg(src: string, callback?: () => void): void {
@@ -45,7 +56,6 @@ export class ImageLoader {
         xhr.open('GET', src);
         xhr.onreadystatechange = this.onXhrComplete.bind(this, src, callback);
 
-        this.requestCount++;
         this.requests[src] = xhr;
 
         xhr.send();
@@ -55,7 +65,7 @@ export class ImageLoader {
         const image = new Image();
         image.src = src;
         image.addEventListener('load', () => {
-            this.rendered++;
+            this.requestsDone++;
             this.renderedImages[src] = image;
 
             if (typeof callback === 'function') {
@@ -76,7 +86,6 @@ export class ImageLoader {
         if (xhr.status !== 200) {
             console.log(`Error loading image from src: ${src}`);
 
-            this.errorCount++;
             this.errors[src] = xhr.statusText;
 
             return;
@@ -94,7 +103,7 @@ export class ImageLoader {
             return;
         }
 
-        this.isReady = true;
+        this.ready = true;
 
         if (typeof callback === 'function') {
             callback();

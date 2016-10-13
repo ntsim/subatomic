@@ -13,8 +13,10 @@ declare namespace SubatomicConfig {
             'polygon' |
             'star' |
             'image';
-        number: number;
+        number?: number;
         density?: number;
+        opacity?: OpacitySetting;
+        size?: SizeSetting;
     }
 
     export interface ImageSetting extends ShapeSetting {
