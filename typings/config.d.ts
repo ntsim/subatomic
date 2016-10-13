@@ -1,7 +1,5 @@
 declare namespace SubatomicConfig {
     export interface Root {
-        number: number;
-        density?: number;
         shapes: ShapeSetting[];
         opacity?: OpacitySetting;
         size?: SizeSetting;
@@ -15,6 +13,8 @@ declare namespace SubatomicConfig {
             'polygon' |
             'star' |
             'image';
+        number: number;
+        density?: number;
     }
 
     export interface ImageSetting extends ShapeSetting {

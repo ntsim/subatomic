@@ -1,7 +1,8 @@
-import raf from 'raf';
-import Subatomic from './Subatomic';
-import SubatomicDOM from './SubatomicDOM';
-import ImageLoader from './image/ImageLoader';
+import * as raf from 'raf';
+
+import { Subatomic } from './Subatomic';
+import { SubatomicDOM } from './SubatomicDOM';
+import { ImageLoader } from './image/ImageLoader';
 
 raf.polyfill();
 
