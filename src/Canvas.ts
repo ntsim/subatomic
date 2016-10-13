@@ -1,13 +1,13 @@
 export class Canvas {
     private _element: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D;
+    private _context: CanvasRenderingContext2D;
 
     constructor(width: string, height: string, className: string) {
         this._element = document.createElement('canvas');
         this._element.style.width = width;
         this._element.style.height = height;
         this._element.className = className;
-        this.context = this._element.getContext('2d');
+        this._context = this._element.getContext('2d');
     }
 
     get element(): HTMLCanvasElement {
@@ -36,5 +36,9 @@ export class Canvas {
 
     clear(): void {
         this.context.clearRect(0, 0, this.width, this.height);
+    }
+
+    get context(): CanvasRenderingContext2D {
+        return this._context;
     }
 }

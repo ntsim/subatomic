@@ -1,8 +1,6 @@
-import { Particle } from './Particle';
-import { Position } from './Position';
+import { Particle, Position } from './Particle';
 import { Canvas } from '../Canvas';
 
-import { Shape } from './shapes/Shape';
 import { Star } from './shapes/Star';
 import { Polygon } from './shapes/Polygon';
 import { Triangle } from './shapes/Triangle';
@@ -49,49 +47,49 @@ export class ParticleGenerator {
         const particles: Particle[] = [];
 
         while (particles.length < number) {
+            let particle: Particle;
+
             const renderPos = position !== undefined ?
                 position : new Position(
                 Math.random() * canvas.width,
                 Math.random() * canvas.height
             );
 
-            let shape: Shape;
+            const renderSize: number =
+                size.value !== undefined ? size.value : DEFAULTS.size.value;
+
+            const renderOpacity: number =
+                opacity.value !== undefined ? opacity.value : DEFAULTS.opacity.value;
 
             switch (type) {
                 case 'circle':
-                    shape = new Circle();
+                    particle = new Circle(renderSize, renderOpacity, renderPos, colour);
                     break;
                 case 'edge':
-                    shape = new Edge();
+                    particle = new Edge(renderSize, renderOpacity, renderPos, colour);
                     break;
                 case 'triangle':
-                    shape = new Triangle();
+                    particle = new Triangle(renderSize, renderOpacity, renderPos, colour);
                     break;
                 case 'polygon':
-                    shape = new Polygon();
+                    particle = new Polygon(renderSize, renderOpacity, renderPos, colour);
                     break;
                 case 'star':
-                    shape = new Star();
+                    particle = new Star(renderSize, renderOpacity, renderPos, colour);
                     break;
                 case 'image': {
                     if (src === undefined) {
                         throw new Error('Cannot generate an image particle without a src URL.');
                     }
 
-                    shape = new Image(src);
+                    // shape = new Image(src);
                     break;
                 }
                 default:
                     throw new Error(`Invalid shape.type \`${type}\` was given.`);
             }
 
-            particles.push(new Particle(
-                shape,
-                opacity.value !== undefined ? opacity.value : DEFAULTS.opacity.value,
-                size.value !== undefined ? size.value : DEFAULTS.size.value,
-                renderPos,
-                colour
-            ));
+            particles.push(particle);
         }
 
         return particles;

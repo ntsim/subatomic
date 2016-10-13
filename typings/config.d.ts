@@ -15,6 +15,7 @@ declare namespace SubatomicConfig {
             'image';
         number?: number;
         density?: number;
+        colour?: string;
         opacity?: OpacitySetting;
         size?: SizeSetting;
     }
@@ -38,6 +39,7 @@ declare namespace SubatomicConfig {
     export interface AnimationSetting {
         speed: number;
     }
+
 
     export interface MovementSetting {
         type?: 'random' | 'straight';

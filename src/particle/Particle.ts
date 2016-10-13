@@ -1,27 +1,33 @@
-import { Position } from './Position';
-import { Shape } from './shapes/Shape';
+import { Canvas } from '../Canvas';
 
-export class Particle {
+export abstract class Particle {
 
-    private shape: Shape;
-    private opacity: number;
-    private size: number;
-    private position: Position;
-    private colour: string;
+    protected opacity: number;
+    protected size: number;
+    protected position: Position;
+    protected colour: string;
 
     constructor(
-        shape: Shape,
         size: number,
         opacity: number,
         position: Position,
         colour: string,
     ) {
-        this.shape = shape;
         this.opacity = opacity;
         this.size = size;
         this.position = position;
         this.colour = colour;
     }
 
+    abstract draw(canvas: Canvas): void;
+}
 
+export class Position {
+    x: number;
+    y: number;
+
+    constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
 }

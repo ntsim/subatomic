@@ -12,6 +12,7 @@ export class Subatomic {
     canvas: Canvas;
     imageLoader: ImageLoader;
     particles: Particle[] = [];
+    currentFrame: number;
 
     readonly config: SubatomicConfig.Root;
 
@@ -40,25 +41,31 @@ export class Subatomic {
             });
 
         if (srcs.length === 0) {
-            this.beginRender();
+            this.prepareForRender();
 
             return;
         }
 
         // Render the canvas after images have loaded
-        this.imageLoader.loadImages(srcs, this.beginRender.bind(this));
+        this.imageLoader.loadImages(srcs, this.prepareForRender.bind(this));
     }
 
-    private beginRender() {
+    private prepareForRender(): void {
         this.canvas.clear();
         this.canvas.paint();
 
         this.config.shapes.forEach((shape) => {
             const particles = ParticleGenerator.generateForShape(shape, this.canvas);
 
-            console.log('GENERATED PARTICLES => ', particles);
-
-            this.particles.concat(particles);
+            this.particles = this.particles.concat(particles);
         });
+
+        this.render();
+    }
+
+    private render(): void {
+        this.currentFrame = window.requestAnimationFrame(this.render.bind(this));
+
+        this.particles.forEach(particle => particle.draw(this.canvas));
     }
 }
