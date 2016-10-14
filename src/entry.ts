@@ -3,7 +3,6 @@ import * as raf from 'raf';
 import { Subatomic } from './Subatomic';
 import { SubatomicDOM } from './SubatomicDOM';
 import { ImageLoader } from './image/ImageLoader';
-import { ParticleGenerator } from "./particle/ParticleGenerator";
 
 raf.polyfill();
 

@@ -3,7 +3,7 @@ import { Canvas } from '../../Canvas';
 
 export class Polygon extends Particle {
 
-    draw(canvas: Canvas): void {
+    drawToCanvas(canvas: Canvas): void {
 
     }
 }

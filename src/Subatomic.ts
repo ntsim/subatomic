@@ -23,7 +23,7 @@ export class Subatomic {
     ) {
         this.id = id;
         this.rootEl = document.getElementById(id);
-        this.canvas = new Canvas('100%', '100%', 'subatomic-canvas');
+        this.canvas = new Canvas(this.rootEl, '100%', '100%', 'subatomic-canvas');
         this.config = config;
         this.imageLoader = imageLoader;
 
@@ -31,8 +31,6 @@ export class Subatomic {
     }
 
     private init(): void {
-        this.rootEl.appendChild(this.canvas.element);
-
         const srcs = this.config.shapes
             .filter(shape => shape.type === 'image')
             .map(shape => {
@@ -52,7 +50,6 @@ export class Subatomic {
 
     private prepareForRender(): void {
         this.canvas.clear();
-        this.canvas.paint();
 
         this.config.shapes.forEach((shape) => {
             const particles = ParticleGenerator.generateForShape(shape, this.canvas);
@@ -66,6 +63,8 @@ export class Subatomic {
     private render(): void {
         this.currentFrame = window.requestAnimationFrame(this.render.bind(this));
 
-        this.particles.forEach(particle => particle.draw(this.canvas));
+        this.particles.forEach(particle => particle.drawToCanvas(this.canvas));
+
+        window.cancelAnimationFrame(this.currentFrame);
     }
 }

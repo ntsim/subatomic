@@ -3,6 +3,6 @@ import { Canvas } from '../../Canvas';
 
 export class Edge extends Particle {
 
-    draw(canvas: Canvas): void {
+    drawToCanvas(canvas: Canvas): void {
     }
 }

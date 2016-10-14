@@ -1,13 +1,19 @@
 export class Canvas {
     private _element: HTMLCanvasElement;
-    private _context: CanvasRenderingContext2D;
+    private context: CanvasRenderingContext2D;
 
-    constructor(width: string, height: string, className: string) {
+    constructor(mountElement: HTMLElement, width: string, height: string, className: string) {
         this._element = document.createElement('canvas');
         this._element.style.width = width;
         this._element.style.height = height;
         this._element.className = className;
-        this._context = this._element.getContext('2d');
+
+        mountElement.appendChild(this.element);
+
+        this.element.height = this.element.offsetHeight * window.devicePixelRatio;
+        this.element.width = this.element.offsetWidth * window.devicePixelRatio;
+
+        this.context = this._element.getContext('2d');
     }
 
     get element(): HTMLCanvasElement {
@@ -15,7 +21,7 @@ export class Canvas {
     }
 
     get height(): number {
-        return this._element.height;
+        return this._element.offsetHeight;
     }
 
     set height(value: number) {
@@ -23,7 +29,7 @@ export class Canvas {
     }
 
     get width(): number {
-        return this._element.width;
+        return this._element.offsetWidth;
     }
 
     set width(value: number) {
@@ -38,7 +44,24 @@ export class Canvas {
         this.context.clearRect(0, 0, this.width, this.height);
     }
 
-    get context(): CanvasRenderingContext2D {
-        return this._context;
+    changeFillColour(colour: string): this {
+        this.context.fillStyle = colour;
+        return this;
+    }
+
+    drawArc(
+        x: number,
+        y: number,
+        size: number,
+        startAngle: number,
+        endAngle: number,
+        antiClockwise: boolean = false
+    ): void {
+        this.context.beginPath();
+
+        this.context.arc(x * this.width, y * this.height, size, startAngle, endAngle, antiClockwise);
+
+        this.context.closePath();
+        this.context.fill();
     }
 }

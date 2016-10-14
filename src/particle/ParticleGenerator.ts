@@ -6,7 +6,6 @@ import { Polygon } from './shapes/Polygon';
 import { Triangle } from './shapes/Triangle';
 import { Edge } from './shapes/Edge';
 import { Circle } from './shapes/Circle';
-import { Image } from './shapes/Image';
 
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import OpacitySetting = SubatomicConfig.OpacitySetting;
@@ -18,8 +17,9 @@ const DEFAULTS = {
         value: 1
     },
     size: {
-        value: 1
-    }
+        value: 5
+    },
+    colour: '#ffffff',
 };
 
 export class ParticleGenerator {
@@ -50,10 +50,7 @@ export class ParticleGenerator {
             let particle: Particle;
 
             const renderPos = position !== undefined ?
-                position : new Position(
-                Math.random() * canvas.width,
-                Math.random() * canvas.height
-            );
+                position : new Position(Math.random(), Math.random());
 
             const renderSize: number =
                 size.value !== undefined ? size.value : DEFAULTS.size.value;
@@ -110,6 +107,8 @@ export class ParticleGenerator {
             particleNumber,
             shape.opacity !== undefined ? shape.opacity : DEFAULTS.opacity,
             shape.size !== undefined ? shape.size : DEFAULTS.size,
+            undefined,
+            shape.colour !== undefined ? shape.colour : DEFAULTS.colour,
         );
     }
 }

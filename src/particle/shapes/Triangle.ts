@@ -3,6 +3,6 @@ import { Canvas } from '../../Canvas';
 
 export class Triangle extends Particle {
 
-    draw(canvas: Canvas): void {
+    drawToCanvas(canvas: Canvas): void {
     }
 }
