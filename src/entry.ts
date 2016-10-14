@@ -1,10 +1,12 @@
 import * as raf from 'raf';
+import * as assign from 'object.assign';
 
 import { Subatomic } from './Subatomic';
 import { SubatomicDOM } from './SubatomicDOM';
 import { ImageLoader } from './image/ImageLoader';
 
 raf.polyfill();
+assign.getPolyfill();
 
 const subatomicDOM = new SubatomicDOM();
 const imageLoader = new ImageLoader();

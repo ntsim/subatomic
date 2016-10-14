@@ -1,114 +1,60 @@
-import { Particle, Position } from './Particle';
-import { Canvas } from '../Canvas';
-
+import { Particle, Position, RGBAColour } from './Particle';
 import { Star } from './shapes/Star';
 import { Polygon } from './shapes/Polygon';
 import { Triangle } from './shapes/Triangle';
-import { Edge } from './shapes/Edge';
+import { Square } from './shapes/Square';
 import { Circle } from './shapes/Circle';
 
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import OpacitySetting = SubatomicConfig.OpacitySetting;
 import SizeSetting = SubatomicConfig.SizeSetting;
-
-const RANDOM_LIMIT = 20;
-const DEFAULTS = {
-    opacity: {
-        value: 1
-    },
-    size: {
-        value: 5
-    },
-    colour: '#ffffff',
-};
+import PolygonSetting = SubatomicConfig.PolygonSetting;
 
 export class ParticleGenerator {
-    /**
-     * @param canvas
-     * @param type
-     * @param number
-     * @param opacity
-     * @param size
-     * @param position
-     * @param colour
-     * @param src
-     * @returns {Array}
-     */
-    static generateForNumber(
-        canvas: Canvas,
-        type: string,
+
+    static generateForShape(shape: ShapeSetting): Particle[] {
+        const { size, opacity, colour, number } = shape;
+
+        const renderColour: RGBAColour = RGBAColour.fromHex(colour, opacity.value);
+
+        let factory: (position: Position) => Particle;
+
+        switch (shape.type) {
+            case 'circle':
+                factory = position => new Circle(position, size.value, renderColour);
+                break;
+            case 'square':
+                factory = position => new Square(position, size.value, renderColour);
+                break;
+            case 'triangle':
+                factory = position => new Triangle(position, size.value, renderColour);
+                break;
+            case 'polygon':
+                const polygon = <PolygonSetting> shape;
+                factory = position => new Polygon(position, size.value, renderColour, polygon.sides);
+                break;
+            case 'star':
+                factory = position => new Star(position, size.value, renderColour);
+                break;
+            default:
+                throw new Error(`Invalid shape.type \`${shape.type}\` was given.`);
+        }
+
+        return ParticleGenerator.generateWithRandomPositions(number, factory);
+    }
+
+    private static generateWithRandomPositions(
         number: number,
-        opacity: OpacitySetting,
-        size: SizeSetting,
-        position?: Position,
-        colour?: string,
-        src?: string,
+        factory: (position: Position) => Particle
     ): Particle[] {
         const particles: Particle[] = [];
 
         while (particles.length < number) {
-            let particle: Particle;
+            const renderPos = new Position(Math.random(), Math.random());
 
-            const renderPos = position !== undefined ?
-                position : new Position(Math.random(), Math.random());
-
-            const renderSize: number =
-                size.value !== undefined ? size.value : DEFAULTS.size.value;
-
-            const renderOpacity: number =
-                opacity.value !== undefined ? opacity.value : DEFAULTS.opacity.value;
-
-            switch (type) {
-                case 'circle':
-                    particle = new Circle(renderSize, renderOpacity, renderPos, colour);
-                    break;
-                case 'edge':
-                    particle = new Edge(renderSize, renderOpacity, renderPos, colour);
-                    break;
-                case 'triangle':
-                    particle = new Triangle(renderSize, renderOpacity, renderPos, colour);
-                    break;
-                case 'polygon':
-                    particle = new Polygon(renderSize, renderOpacity, renderPos, colour);
-                    break;
-                case 'star':
-                    particle = new Star(renderSize, renderOpacity, renderPos, colour);
-                    break;
-                case 'image': {
-                    if (src === undefined) {
-                        throw new Error('Cannot generate an image particle without a src URL.');
-                    }
-
-                    // shape = new Image(src);
-                    break;
-                }
-                default:
-                    throw new Error(`Invalid shape.type \`${type}\` was given.`);
-            }
-
-            particles.push(particle);
+            particles.push(factory(renderPos));
         }
 
         return particles;
-    }
-
-    /**
-     * @param shape
-     * @param canvas
-     * @returns {Particle[]}
-     */
-    static generateForShape(shape: ShapeSetting, canvas: Canvas): Particle[] {
-        const particleNumber = shape.number !== undefined ?
-            shape.number : Math.floor(Math.random() * RANDOM_LIMIT);
-
-        return ParticleGenerator.generateForNumber(
-            canvas,
-            shape.type,
-            particleNumber,
-            shape.opacity !== undefined ? shape.opacity : DEFAULTS.opacity,
-            shape.size !== undefined ? shape.size : DEFAULTS.size,
-            undefined,
-            shape.colour !== undefined ? shape.colour : DEFAULTS.colour,
-        );
     }
 }

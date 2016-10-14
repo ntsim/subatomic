@@ -8,7 +8,7 @@ declare namespace SubatomicConfig {
 
     export interface ShapeSetting {
         type: 'circle' |
-            'edge' |
+            'square' |
             'triangle' |
             'polygon' |
             'star' |
@@ -26,6 +26,10 @@ declare namespace SubatomicConfig {
         ratioY: number;
     }
 
+    export interface PolygonSetting extends ShapeSetting {
+        sides: number;
+    }
+
     export interface OpacitySetting {
         value: number;
         animation?: AnimationSetting;
@@ -39,7 +43,6 @@ declare namespace SubatomicConfig {
     export interface AnimationSetting {
         speed: number;
     }
-
 
     export interface MovementSetting {
         type?: 'random' | 'straight';

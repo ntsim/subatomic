@@ -1,19 +1,11 @@
 import { Canvas } from '../Canvas';
 
 export abstract class Particle {
-    public colour: Colour;
-
     constructor(
-        public size: number,
-        public opacity: number,
         public position: Position,
-        colour: string,
-    ) {
-        this.opacity = opacity;
-        this.size = size;
-        this.position = position;
-        this.colour = new Colour(colour);
-    }
+        public size: number,
+        public colour: RGBAColour,
+    ) {}
 
     abstract drawToCanvas(canvas: Canvas): void;
 }
@@ -36,23 +28,39 @@ export class Position {
     }
 }
 
-export class Colour {
-    r: number = 0;
-    g: number = 0;
-    b: number = 0;
+export class RGBAColour {
+    constructor(
+        public r: number = 0,
+        public g: number = 0,
+        public b: number = 0,
+        public a: number = 1
+    ) {}
 
-    constructor(hexColour: string) {
+    toString(): string {
+        return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
+    }
+
+    static fromHex(hexColour: string, opacity: number = 1.0): RGBAColour {
+        if (opacity > 1 || opacity < 0) {
+            throw new Error('Opacity cannot be greater than 1 or less than 0.');
+        }
+
         const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-        const hex = hexColour.replace(shorthandRegex,(m, r, g, b) => {
+        const hex = hexColour.replace(shorthandRegex, (m, r, g, b) => {
             return r + r + g + g + b + b;
         });
 
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
-        if (result) {
-            this.r = parseInt(result[1], 16);
-            this.g = parseInt(result[2], 16);
-            this.b = parseInt(result[3], 16);
+        if (!result) {
+            throw new Error('Invalid hex colour was provided.');
         }
+
+        return new RGBAColour(
+            parseInt(result[1], 16),
+            parseInt(result[2], 16),
+            parseInt(result[3], 16),
+            +opacity,
+        );
     }
 }
