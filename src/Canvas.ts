@@ -3,7 +3,7 @@
  */
 export class Canvas {
     private _element: HTMLCanvasElement;
-    context: CanvasRenderingContext2D;
+    readonly context: CanvasRenderingContext2D;
 
     constructor(mountElement: HTMLElement, width: string, height: string, className: string) {
         this._element = document.createElement('canvas');
@@ -33,52 +33,91 @@ export class Canvas {
         return this;
     }
 
+    /**
+     * @param x coordinate
+     * @param y coordinate
+     * @param radius
+     * @param startAngle (degrees)
+     * @param endAngle (degrees)
+     * @param antiClockwise
+     * @returns {Canvas}
+     */
     drawArc(
         x: number,
         y: number,
-        size: number,
+        radius: number,
         startAngle: number,
         endAngle: number,
         antiClockwise: boolean = false
     ): this {
         return this.draw(() => {
-            this.context.arc(this.normalX(x), this.normalY(y), size, startAngle, endAngle, antiClockwise);
+            this.context.arc(
+                this.normalizeX(x),
+                this.normalizeY(y),
+                radius,
+                toRadians(startAngle),
+                toRadians(endAngle),
+                antiClockwise
+            );
         });
     }
 
+    /**
+     * @param x coordinate
+     * @param y coordinate
+     * @param width
+     * @param height
+     * @returns {Canvas}
+     */
     drawRectangle(
         x: number,
         y: number,
         width: number,
         height: number,
     ): this {
-        return this.draw(() => this.context.rect(this.normalX(x), this.normalY(y), width, height));
+        return this.draw(() => this.context.rect(this.normalizeX(x), this.normalizeY(y), width, height));
     }
 
-    drawShape(
+    /**
+     * @param x coordinate
+     * @param y coordinate
+     * @param radius
+     * @param sides
+     * @param rotationAngle (degrees)
+     * @param vertexAngle (degrees) for advanced manipulation (e.g. for generating stars)
+     * @returns {Canvas}
+     */
+    drawPolygon(
         x: number,
         y: number,
-        size: number,
+        radius: number,
         sides: number,
-        interiorAngle?: number
-    ): this {
-        const canvasX = this.normalX(x);
-        const canvasY = this.normalY(y);
+        rotationAngle: number = 0,
+        vertexAngle: number = -360 / sides,
+    ) {
+        if (sides < 3) {
+            throw new Error('Cannot draw a shape with less than 3 sides.');
+        }
 
-        let radius = size / (2 * Math.sin(Math.PI / sides));
-        radius = Math.round(radius);
+        const canvasX = this.normalizeX(x);
+        const canvasY = this.normalizeY(y);
+
+        let sideLength = 2 * radius * Math.sin(Math.PI / sides);
+        sideLength = Math.round(sideLength);
+
+        const vertexRotation = toRadians(vertexAngle);
 
         this.context.save();
-
-        // const theta = interiorAngle !== undefined ? interiorAngle : (180 - (360 / sides)) * Math.PI / 180;
-        const theta = ((Math.PI * 2) / sides);
+        this.context.rotate(toRadians(rotationAngle));
 
         this.draw(() => {
-            this.context.translate(canvasX, canvasY);
-            this.context.moveTo(radius, 0);
+            this.context.translate(canvasX + sideLength, canvasY);
+            this.context.moveTo(0, 0);
 
             for (let i = 1; i < sides; i++) {
-                this.context.lineTo(radius * Math.cos(theta * i), radius * Math.sin(radius * i));
+                this.context.lineTo(sideLength, 0);
+                this.context.translate(sideLength, 0);
+                this.context.rotate(vertexRotation);
             }
         });
 
@@ -118,11 +157,15 @@ export class Canvas {
         return this;
     }
 
-    private normalX(x: number) {
+    private normalizeX(x: number): number {
         return Math.round(x * this.width);
     }
 
-    private normalY(y: number) {
+    private normalizeY(y: number): number {
         return Math.round(y * this.height);
     }
+}
+
+function toRadians(degrees: number): number {
+    return degrees * Math.PI / 180;
 }

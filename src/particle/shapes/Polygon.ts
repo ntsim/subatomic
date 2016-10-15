@@ -15,11 +15,11 @@ export class Polygon extends Particle {
     drawToCanvas(canvas: Canvas): void {
         canvas
             .changeFillColour(this.colour.toString())
-            .drawShape(
+            .drawPolygon(
                 this.position.x,
                 this.position.y,
                 this.size,
-                this.sides
+                this.sides,
             );
     }
 }

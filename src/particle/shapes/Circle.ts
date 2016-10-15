@@ -6,12 +6,6 @@ export class Circle extends Particle {
     drawToCanvas(canvas: Canvas): void {
         canvas
             .changeFillColour(this.colour.toString())
-            .drawArc(
-                this.position.x,
-                this.position.y,
-                this.size,
-                0,
-                Math.PI * 2
-            );
+            .drawArc(this.position.x, this.position.y, this.size, 0, 360);
     }
 }
