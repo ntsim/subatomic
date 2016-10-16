@@ -13,8 +13,8 @@ export class Subatomic {
     canvas: Canvas;
     imageLoader: ImageLoader;
     particles: Particle[] = [];
+    particleGenerator: ParticleGenerator;
     currentFrame: number;
-
     readonly config: SubatomicConfig.Root;
 
     constructor(
@@ -27,6 +27,7 @@ export class Subatomic {
         this.canvas = new Canvas(this.rootEl, '100%', '100%', 'subatomic-canvas');
         this.config = ConfigResolver.resolve(config);
         this.imageLoader = imageLoader;
+        this.particleGenerator = new ParticleGenerator(this.config);
 
         console.log('THE CONFIG => ', this.config);
 
@@ -52,21 +53,25 @@ export class Subatomic {
     }
 
     private prepareForRender(): void {
-        this.canvas.clear();
-
-        this.config.shapes.forEach((shape) => {
-            const particles = ParticleGenerator.generateForShape(shape);
-
-            this.particles = this.particles.concat(particles);
-        });
-
+        this.particles = this.particleGenerator.generateParticles();
         this.render();
     }
 
     private render(): void {
-        this.particles.forEach(particle => particle.drawToCanvas(this.canvas));
+        this.canvas.clear();
+
+        this.particles.forEach((particle) => {
+            if (this.config.movement.enabled) {
+                particle.move();
+            }
+
+            particle.drawToCanvas(this.canvas);
+        });
 
         this.currentFrame = window.requestAnimationFrame(this.render.bind(this));
-        window.cancelAnimationFrame(this.currentFrame);
+
+        if (!this.config.movement.enabled) {
+            window.cancelAnimationFrame(this.currentFrame);
+        }
     }
 }

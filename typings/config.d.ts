@@ -45,9 +45,10 @@ declare namespace SubatomicConfig {
     }
 
     export interface MovementSetting {
-        type?: 'random' | 'straight';
-        speed?: number;
-        direction: 'top' |
+        enabled: boolean,
+        direction:
+            'none' |
+            'top' |
             'top-right' |
             'right' |
             'bottom-right' |
@@ -55,5 +56,8 @@ declare namespace SubatomicConfig {
             'bottom-left' |
             'left' |
             'top-left';
+        type?: 'random' | 'straight';
+        speed?: number;
+        bounce?: boolean;
     }
 }

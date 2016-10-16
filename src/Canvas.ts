@@ -1,3 +1,5 @@
+import { toRadians } from './util';
+
 /**
  * Wrapper for HTMLCanvasElement. Must be mounted (appended) to an existing HTMLElement.
  */
@@ -164,8 +166,4 @@ export class Canvas {
     private normalizeY(y: number): number {
         return Math.round(y * this.height);
     }
-}
-
-function toRadians(degrees: number): number {
-    return degrees * Math.PI / 180;
 }

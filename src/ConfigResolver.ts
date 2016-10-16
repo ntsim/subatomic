@@ -1,7 +1,8 @@
-import { SHAPE_DEFAULTS } from './defaults';
+import { SHAPE_DEFAULTS, MOVEMENT_DEFAULTS } from './defaults';
 import { deepMerge } from './util';
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import SizeSetting = SubatomicConfig.SizeSetting;
+import MovementSetting = SubatomicConfig.MovementSetting;
 
 const ALLOWED_SHAPES = [
     'circle',
@@ -27,19 +28,20 @@ export class ConfigResolver {
     static resolve(config: SubatomicConfig.Root): SubatomicConfig.Root {
         return {
             shapes: handleShapes(config.shapes),
+            movement: handleMovement(config.movement),
         };
     }
 }
 
-const handleShapes = (shapes: ShapeSetting[]): ShapeSetting[] => {
+function handleShapes(shapes: ShapeSetting[]): ShapeSetting[] {
     if (shapes.length < 1) {
         throw new Error('Config must provide at least one shape to render.');
     }
 
     return shapes.map(handleShape);
-};
+}
 
-const handleShape = (shape: ShapeSetting): ShapeSetting => {
+function handleShape(shape: ShapeSetting): ShapeSetting {
     if (ALLOWED_SHAPES.indexOf(shape.type) < 0) {
         throw new Error('Config must provide a valid non-empty shape.type property.');
     }
@@ -53,5 +55,8 @@ const handleShape = (shape: ShapeSetting): ShapeSetting => {
     }
 
     return deepMerge(SHAPE_DEFAULTS, shape);
-};
+}
 
+function handleMovement(movement: MovementSetting): MovementSetting {
+    return deepMerge(MOVEMENT_DEFAULTS, movement || {});
+}

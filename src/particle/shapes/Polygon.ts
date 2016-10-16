@@ -1,4 +1,4 @@
-import { Particle, Position, RGBAColour } from '../Particle';
+import { Particle, Position, RGBAColour, Velocity } from '../Particle';
 import { Canvas } from '../../Canvas';
 
 export class Polygon extends Particle {
@@ -8,8 +8,9 @@ export class Polygon extends Particle {
         public size: number,
         public colour: RGBAColour,
         public sides: number,
+        public velocity: Velocity
     ) {
-        super(position, size, colour);
+        super(position, size, colour,velocity);
     }
 
     drawToCanvas(canvas: Canvas): void {
