@@ -1,10 +1,5 @@
-import { Particle, Position, RGBAColour, Velocity } from './Particle';
-import { Star } from './shapes/Star';
-import { Polygon } from './shapes/Polygon';
-import { Triangle } from './shapes/Triangle';
-import { Square } from './shapes/Square';
-import { Circle } from './shapes/Circle';
-import { Canvas } from '../Canvas';
+import { Particle, Position, RGBAColour, Velocity, Star, Polygon, Triangle, Square, Circle } from './particle';
+import { Canvas } from './Canvas';
 
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import OpacitySetting = SubatomicConfig.OpacitySetting;

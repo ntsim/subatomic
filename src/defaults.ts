@@ -1,5 +1,6 @@
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import MovementSetting = SubatomicConfig.MovementSetting;
+import LinkSetting = SubatomicConfig.LinkSetting;
 
 export const SHAPE_DEFAULTS: ShapeSetting = {
     type: 'circle',
@@ -19,4 +20,8 @@ export const MOVEMENT_DEFAULTS: MovementSetting = {
     speed: 0.01,
     direction: 'none',
     bounce: true
+};
+
+export const LINK_DEFAULTS: LinkSetting = {
+    enabled: true,
 };

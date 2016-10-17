@@ -1,18 +1,16 @@
-import { Particle, Position } from '../Particle';
-import { Canvas } from '../../Canvas';
+import { Particle, Position } from './Particle';
+import { Canvas } from '../Canvas';
 
-export class Star extends Particle {
+export class Square extends Particle {
 
     drawToCanvas(canvas: Canvas): void {
         canvas
             .changeFillColour(this.colour.toString())
-            .drawPolygon(
+            .drawRectangle(
                 this.position.x,
                 this.position.y,
                 this.size,
-                5,
-                0,
-                144,
+                this.size
             );
     }
 }

@@ -4,6 +4,7 @@ declare namespace SubatomicConfig {
         opacity?: OpacitySetting;
         size?: SizeSetting;
         movement?: MovementSetting;
+        link?: LinkSetting;
     }
 
     export interface ShapeSetting {
@@ -59,5 +60,13 @@ declare namespace SubatomicConfig {
         type?: 'random' | 'straight';
         speed?: number;
         bounce?: boolean;
+    }
+
+    export interface LinkSetting {
+        enabled?: boolean;
+        distance?: number;
+        colour?: string;
+        opacity?: number;
+        width?: number;
     }
 }

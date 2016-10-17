@@ -1,5 +1,5 @@
-import { Particle, Position, RGBAColour, Velocity } from '../Particle';
-import { Canvas } from '../../Canvas';
+import { Particle, Position, RGBAColour, Velocity } from './Particle';
+import { Canvas } from '../Canvas';
 
 export class Polygon extends Particle {
 

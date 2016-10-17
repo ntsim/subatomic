@@ -1,8 +1,9 @@
-import { SHAPE_DEFAULTS, MOVEMENT_DEFAULTS } from './defaults';
+import { SHAPE_DEFAULTS, MOVEMENT_DEFAULTS, LINK_DEFAULTS } from './defaults';
 import { deepMerge } from './util';
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import SizeSetting = SubatomicConfig.SizeSetting;
 import MovementSetting = SubatomicConfig.MovementSetting;
+import LinkSetting = SubatomicConfig.LinkSetting;
 
 const ALLOWED_SHAPES = [
     'circle',
@@ -29,6 +30,7 @@ export class ConfigResolver {
         return {
             shapes: handleShapes(config.shapes),
             movement: handleMovement(config.movement),
+            link: handleLink(config.link),
         };
     }
 }
@@ -59,4 +61,8 @@ function handleShape(shape: ShapeSetting): ShapeSetting {
 
 function handleMovement(movement: MovementSetting): MovementSetting {
     return deepMerge(MOVEMENT_DEFAULTS, movement || {});
+}
+
+function handleLink(link: LinkSetting): LinkSetting {
+    return deepMerge(LINK_DEFAULTS, link || {});
 }
