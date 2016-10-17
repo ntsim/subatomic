@@ -1,4 +1,15 @@
-import { Particle, Position, RGBAColour, Velocity, Star, Polygon, Triangle, Square, Circle } from './particle';
+import {
+    Particle,
+    Position,
+    RGBAColour,
+    OpacityAnimation,
+    Velocity,
+    Star,
+    Polygon,
+    Triangle,
+    Square,
+    Circle
+} from './particle';
 import { Canvas } from './Canvas';
 
 import ShapeSetting = SubatomicConfig.ShapeSetting;
@@ -84,7 +95,19 @@ export class ParticleGenerator {
         const particles: Particle[] = [];
 
         while (particles.length < number) {
-            particles.push(factory());
+            const particle = factory();
+
+            // Handle the opacity animation
+            if (shape.opacity.animation !== undefined) {
+                const animation = shape.opacity.animation;
+                particle.opacityAnimation = new OpacityAnimation(animation.speed, animation.min, particle.colour.a);
+
+                if (!animation.allSynced) {
+                    particle.colour.a = Math.random();
+                }
+            }
+
+            particles.push(particle);
         }
 
         return particles;

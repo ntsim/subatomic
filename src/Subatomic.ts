@@ -79,6 +79,10 @@ export class Subatomic {
                 this.manipulator.moveParticle(particle, this.config.movement.bounce);
             }
 
+            if (particle.opacityAnimation !== undefined) {
+                particle.animateOpacity();
+            }
+
             particle.drawToCanvas(this.canvas);
         });
 

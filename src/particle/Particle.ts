@@ -5,10 +5,27 @@ export abstract class Particle {
         public position: Position,
         public size: number,
         public colour: RGBAColour,
-        public velocity?: Velocity
+        public velocity?: Velocity,
+        public opacityAnimation?: OpacityAnimation
     ) {}
 
     abstract drawToCanvas(canvas: Canvas): void;
+
+    animateOpacity(): void {
+        const { speed, min, max } = this.opacityAnimation;
+        const relativeSpeed = speed / 100;
+        const colourChange = this.colour.a - relativeSpeed;
+
+        if (colourChange <= min) {
+            this.opacityAnimation.speed = -this.opacityAnimation.speed;
+            // this.colour.a = min;
+        } else if (colourChange >= max) {
+            this.opacityAnimation.speed = -this.opacityAnimation.speed;
+            // this.colour.a = max;
+        }
+
+        this.colour.a = colourChange;
+    }
 }
 
 export class Position {
@@ -18,6 +35,10 @@ export class Position {
 
 export class Velocity {
     constructor(public dX: number, public dY: number) {}
+}
+
+export class OpacityAnimation {
+    constructor(public speed: number, public min: number = 0, public max: number = 1) {}
 }
 
 export class RGBAColour {
