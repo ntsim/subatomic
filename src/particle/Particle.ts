@@ -1,7 +1,5 @@
 import { Canvas } from '../Canvas';
 
-const SPEED = 0.02;
-
 export abstract class Particle {
     constructor(
         public position: Position,
@@ -11,38 +9,12 @@ export abstract class Particle {
     ) {}
 
     abstract drawToCanvas(canvas: Canvas): void;
-
-    move(): void {
-        let nextX = this.position.x + this.velocity.dX;
-        let nextY = this.position.y + this.velocity.dY;
-
-        if (nextX >= 1 || nextX <= -1) {
-            nextX = -nextX;
-        }
-
-        if (nextY >= 1 || nextY <= -1) {
-            nextY = -nextY;
-        }
-
-        this.position = new Position(nextX, nextY);
-    }
 }
 
 export class Position {
-    constructor(public x: number, public y: number) {
-        // if (x > 1 || x < 0) {
-        //     throw new Error('x-coordinate cannot be greater than 1 or less than 0.');
-        // }
-        //
-        // if (y > 1 || y < 0) {
-        //     throw new Error('y-coordinate cannot be greater than 1 or less than 0.');
-        // }
-    }
+    constructor(public x: number, public y: number) {}
 }
 
-/**
- * Represents the change in position of the particle over time.
- */
 export class Velocity {
     constructor(public dX: number, public dY: number) {}
 }

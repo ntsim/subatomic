@@ -17,11 +17,11 @@
         shapes: [
             {
                 type: 'circle',
-                number: 20,
+                number: 40,
                 colour: '#ffffff',
                 sides: 5,
                 size: {
-                    value: 10,
+                    value: 2,
                 },
             },
 //            {
@@ -34,7 +34,12 @@
 //                number: 10,
 //                src: 'assets/svgs/test2.svg'
 //            }
-        ]
+        ],
+        movement: {
+            type: 'random',
+            direction: 'top',
+            bounce: false,
+        }
     });
 </script>
 

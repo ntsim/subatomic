@@ -11,10 +11,14 @@ assign.getPolyfill();
 const subatomicDOM = new SubatomicDOM();
 const imageLoader = new ImageLoader();
 
-window.subatomic = (selector: string, config?: SubatomicConfig.Root): SubatomicDOM => {
+window.subatomic = (selector: string, config?: SubatomicConfig.Root): Subatomic => {
     const instance = new Subatomic(selector, config, imageLoader);
 
     subatomicDOM.add(instance);
 
+    return instance;
+};
+
+window.subatomicDOM = () => {
     return subatomicDOM;
 };

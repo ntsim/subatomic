@@ -16,14 +16,10 @@ export class Canvas {
 
         mountElement.appendChild(this.element);
 
-        this.element.height = this.element.offsetHeight * window.devicePixelRatio;
-        this.element.width = this.element.offsetWidth * window.devicePixelRatio;
+        this.height = this.element.offsetHeight * window.devicePixelRatio;
+        this.width = this.element.offsetWidth * window.devicePixelRatio;
 
         this.context = this._element.getContext('2d');
-    }
-
-    paint(): void {
-        this.context.fillRect(0, 0, this.width, this.height);
     }
 
     clear(): void {
@@ -133,7 +129,7 @@ export class Canvas {
     }
 
     get height(): number {
-        return this._element.offsetHeight;
+        return this._element.height;
     }
 
     set height(value: number) {
@@ -141,11 +137,19 @@ export class Canvas {
     }
 
     get width(): number {
-        return this._element.offsetWidth;
+        return this._element.width;
     }
 
     set width(value: number) {
         this._element.width = value;
+    }
+
+    normalizeX(x: number): number {
+        return Math.round(x * this.width);
+    }
+
+    normalizeY(y: number): number {
+        return Math.round(y * this.height);
     }
 
     private draw(callback: () => void): this {
@@ -157,13 +161,5 @@ export class Canvas {
         this.context.fill();
 
         return this;
-    }
-
-    private normalizeX(x: number): number {
-        return Math.round(x * this.width);
-    }
-
-    private normalizeY(y: number): number {
-        return Math.round(y * this.height);
     }
 }

@@ -4,6 +4,7 @@ import { Polygon } from './shapes/Polygon';
 import { Triangle } from './shapes/Triangle';
 import { Square } from './shapes/Square';
 import { Circle } from './shapes/Circle';
+import { Canvas } from '../Canvas';
 
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import OpacitySetting = SubatomicConfig.OpacitySetting;
@@ -12,19 +13,18 @@ import PolygonSetting = SubatomicConfig.PolygonSetting;
 import MovementSetting = SubatomicConfig.MovementSetting;
 
 export class ParticleGenerator {
-    constructor(public config: SubatomicConfig.Root) {
+    constructor(public config: SubatomicConfig.Root, public canvas: Canvas) {
     }
 
     generateParticles(): Particle[] {
         let allParticles: Particle[] = [];
 
-        this.config.shapes.forEach(
-            (shape) => {
+        this.config.shapes
+            .forEach((shape) => {
                 const particles = this.generateForShape(shape);
 
                 allParticles = allParticles.concat(particles);
-            }
-        );
+            });
 
         return allParticles;
     }
@@ -34,40 +34,65 @@ export class ParticleGenerator {
 
         const renderColour: RGBAColour = RGBAColour.fromHex(colour, opacity.value);
 
-        let factory: (position: Position) => Particle;
+        let factory: () => Particle;
 
         switch (shape.type) {
             case 'circle':
-                factory = (position) => {
-                    return new Circle(position, size.value, renderColour, this.calculateVelocity());
-                };
+                factory = () => new Circle(
+                    this.generateRandomPosition(shape.size.value),
+                    size.value,
+                    renderColour,
+                    this.calculateVelocity()
+                );
                 break;
             case 'square':
-                factory = (position) => {
-                    return new Square(position, size.value, renderColour, this.calculateVelocity());
-                };
+                factory = () => new Square(
+                    this.generateRandomPosition(shape.size.value),
+                    size.value,
+                    renderColour,
+                    this.calculateVelocity()
+                );
                 break;
             case 'triangle':
-                factory = (position) => {
-                    return new Triangle(position, size.value, renderColour, this.calculateVelocity());
-                };
+                factory = () => new Triangle(
+                    this.generateRandomPosition(shape.size.value),
+                    size.value,
+                    renderColour,
+                    this.calculateVelocity()
+                );
                 break;
             case 'polygon':
-                const polygon = <PolygonSetting> shape;
-                factory = (position) => {
-                    return new Polygon(position, size.value, renderColour, polygon.sides, this.calculateVelocity());
+                factory = () => {
+                    const polygon = <PolygonSetting> shape;
+
+                    return new Polygon(
+                        this.generateRandomPosition(shape.size.value),
+                        size.value,
+                        renderColour,
+                        polygon.sides,
+                        this.calculateVelocity()
+                    );
                 };
                 break;
             case 'star':
-                factory = (position) => {
-                    return new Star(position, size.value, renderColour, this.calculateVelocity());
-                };
+                factory = () => new Star(
+                    this.generateRandomPosition(shape.size.value),
+                    size.value,
+                    renderColour,
+                    this.calculateVelocity()
+                );
                 break;
             default:
                 throw new Error(`Invalid shape.type \`${shape.type}\` was given.`);
         }
 
-        return this.generateWithRandomPositions(number, factory);
+        const particles: Particle[] = [];
+
+        while (particles.length < number) {
+            particles.push(factory());
+        }
+
+        return particles;
     }
 
     private calculateVelocity(): Velocity {
@@ -119,28 +144,35 @@ export class ParticleGenerator {
                 break;
         }
 
-        if (movement.type === 'straight') {
-            return new Velocity(baseX * movement.speed, baseY * movement.speed);
+        if (movement.type === 'random') {
+            baseX = baseX + (2 * Math.random()) - 1;
+            baseY = baseY + (2 * Math.random()) - 1;
         }
-
-        baseX = baseX + (2 * Math.random()) - 1;
-        baseY = baseY + (2 * Math.random()) - 1;
-
+        
         return new Velocity(baseX * movement.speed, baseY * movement.speed);
     }
 
-    private generateWithRandomPositions(
-        number: number,
-        factory: (position: Position) => Particle
-    ) {
-        const particles: Particle[] = [];
+    private generateRandomPosition(size: number): Position {
+        const canvasMaxWidth = this.canvas.width - size;
+        const canvasMaxHeight = this.canvas.height - size;
+        const relativeWidthSize = size / this.canvas.width;
+        const relativeHeightSize = size / this.canvas.height;
 
-        while (particles.length < number) {
-            const renderPos = new Position(Math.random(), Math.random());
+        // Generate a random coordinate
+        let x = Math.random();
+        let y = Math.random();
 
-            particles.push(factory(renderPos));
-        }
+        const normalX = this.canvas.normalizeX(x);
+        const normalY = this.canvas.normalizeY(y);
 
-        return particles;
+        // Make sure that the coordinate does not make an edge of any
+        // particle fall outside of the actual canvas
+        x = (normalX + size) > canvasMaxWidth ? x - relativeWidthSize : x;
+        y = (normalY + size) > canvasMaxHeight ? y - relativeHeightSize : y;
+
+        x = (normalX - size) < 0 ? x + relativeWidthSize : x;
+        y = (normalY - size) < 0 ? y + relativeHeightSize : y;
+
+        return new Position(x, y);
     }
 }
