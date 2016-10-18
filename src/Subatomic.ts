@@ -17,6 +17,8 @@ export class Subatomic {
     generator: ParticleGenerator;
     manipulator: ParticleManipulator;
     currentFrame: number;
+    currentFrameStart: number;
+    lastFrameStart: number;
     readonly config: SubatomicConfig.Root;
 
     constructor(
@@ -41,8 +43,10 @@ export class Subatomic {
     }
 
     start(): void {
+        this.currentFrameStart = Date.now();
         this.performRender();
         this.currentFrame = window.requestAnimationFrame(this.start.bind(this));
+        this.lastFrameStart = this.currentFrameStart;
     }
 
     halt(): void {
@@ -80,13 +84,18 @@ export class Subatomic {
     private performRender(): void {
         this.canvas.clear();
 
+        // Calculate the time difference between the current frame and the last
+        // frame so we can perform time-dependent changes more consistently
+        // (otherwise we might be working off any arbitrary scale).
+        const deltaTime = (this.currentFrameStart - this.lastFrameStart) / 1000 || 0;
+
         this.particles.forEach((particle, key) => {
             if (this.config.movement.enabled) {
-                this.manipulator.moveParticle(particle, this.config.movement.bounce);
+                this.manipulator.moveParticle(particle, deltaTime, this.config.movement.bounce);
             }
 
             if (particle.opacityAnimation !== undefined) {
-                this.manipulator.animateParticleOpacity(particle);
+                this.manipulator.animateParticleOpacity(particle, deltaTime);
             }
 
             particle.drawToCanvas(this.canvas);

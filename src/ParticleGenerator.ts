@@ -74,7 +74,7 @@ export class ParticleGenerator {
                 }
 
                 particle.opacityAnimation = new OpacityAnimation(
-                    speed / 100,
+                    speed,
                     min,
                     opacity.value
                 );

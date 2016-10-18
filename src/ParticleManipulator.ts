@@ -4,9 +4,9 @@ import { Canvas } from './Canvas';
 export class ParticleManipulator {
     constructor(public canvas: Canvas) {}
 
-    moveParticle(particle: Particle, canBounce: boolean): void {
-        let nextX = particle.position.x + particle.velocity.dX;
-        let nextY = particle.position.y + particle.velocity.dY;
+    moveParticle(particle: Particle, deltaTime: number, canBounce: boolean): void {
+        let nextX = particle.position.x + (particle.velocity.x * deltaTime);
+        let nextY = particle.position.y + (particle.velocity.y * deltaTime);
 
         // Keep track of if an edge was hit so that we can
         // swap the direction of the particle accordingly
@@ -16,6 +16,9 @@ export class ParticleManipulator {
         const sizeRelativeX = particle.size / this.canvas.width;
         const sizeRelativeY = particle.size / this.canvas.height;
 
+        // We define the edges of the canvas as being +/- the particle radius so that
+        // we either see the entire particle move off the canvas (for no bounce)
+        // or see none of the particle move off the edge (for a bounce)
         const maxEdgeX =
             canBounce ? 1 - sizeRelativeX : 1 + sizeRelativeX;
         const minEdgeX =
@@ -42,18 +45,18 @@ export class ParticleManipulator {
         }
 
         if (xWasHit) {
-            particle.velocity.dX = canBounce ? -particle.velocity.dX : particle.velocity.dX;
+            particle.velocity.x = canBounce ? -particle.velocity.x : particle.velocity.x;
         }
 
         if (yWasHit) {
-            particle.velocity.dY = canBounce ? -particle.velocity.dY : particle.velocity.dY;
+            particle.velocity.y = canBounce ? -particle.velocity.y : particle.velocity.y;
         }
 
         particle.position.x = nextX;
         particle.position.y = nextY;
     }
 
-    animateParticleOpacity(particle: Particle): void {
+    animateParticleOpacity(particle: Particle, deltaTime: number): void {
         const { speed, min, max, reverse } = particle.opacityAnimation;
 
         if (particle.colour.a <= min) {
@@ -62,7 +65,8 @@ export class ParticleManipulator {
             particle.opacityAnimation.reverse = false;
         }
 
-        particle.colour.a = reverse ? particle.colour.a + speed : particle.colour.a - speed;
+        particle.colour.a =
+            reverse ? particle.colour.a + (speed * deltaTime): particle.colour.a - (speed * deltaTime);
 
         if (particle.colour.a < 0) {
             particle.colour.a = 0;

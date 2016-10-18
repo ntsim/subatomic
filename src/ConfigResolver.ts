@@ -63,10 +63,6 @@ function handleShape(shape: ShapeSetting): ShapeSetting {
     if (shape.opacity.animation !== undefined) {
         const opacityAnimation = shape.opacity.animation;
 
-        if (opacityAnimation.speed > 100 || opacityAnimation.speed < 0) {
-            throw new Error('Config must provide a shape.opacity.animation.speed property between 0 and 100.');
-        }
-
         if (opacityAnimation.min > shape.opacity.value) {
             throw new Error('Config must provide a shape.opacity.animation.min less than the shape.opacity.value.');
         }
@@ -80,10 +76,6 @@ function handleShape(shape: ShapeSetting): ShapeSetting {
 }
 
 function handleMovement(movement: MovementSetting): MovementSetting {
-    if (movement.speed < 0 || movement.speed > 1) {
-        throw new Error('Config must provide a movement.speed property between 0 and 100.');
-    }
-
     return deepMerge(MOVEMENT_DEFAULTS, movement || {});
 }
 

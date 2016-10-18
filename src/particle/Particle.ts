@@ -53,7 +53,7 @@ export class Position {
 }
 
 export class Velocity {
-    constructor(public dX: number, public dY: number) {}
+    constructor(public x: number, public y: number) {}
 
     /**
      * Generate a particle Velocity from the provided MovementSetting in the SubatomicConfig.
@@ -113,7 +113,9 @@ export class Velocity {
             baseY = baseY + (2 * Math.random()) - 1;
         }
 
-        return new Velocity(baseX * movement.speed, baseY * movement.speed);
+        const fractionalSpeed = movement.speed / 100;
+
+        return new Velocity(baseX * fractionalSpeed, baseY * fractionalSpeed);
     }
 }
 
@@ -129,7 +131,7 @@ export class OpacityAnimation {
         public reverse: boolean = false
     ) {
         // Speed is a percentage (per frame) of the opacity animation range
-        this.speed = (max - min) * speed;
+        this.speed = (max - min) * speed / 100;
         this.min = min;
         this.max = max;
     }
