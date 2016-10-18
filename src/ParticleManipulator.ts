@@ -40,4 +40,20 @@ export class ParticleManipulator {
         particle.position.x = nextX;
         particle.position.y = nextY;
     }
+
+    animateParticleOpacity(particle: Particle): void {
+        const { speed, min, max, reverse, range } = particle.opacityAnimation;
+
+        if (particle.colour.a <= min) {
+            particle.opacityAnimation.reverse = true;
+        } else if (particle.colour.a >= max) {
+            particle.opacityAnimation.reverse = false;
+        }
+
+        particle.colour.a = reverse ? particle.colour.a + speed : particle.colour.a - speed;
+
+        if (particle.colour.a < 0) {
+            particle.colour.a = 0;
+        }
+    }
 }

@@ -35,61 +35,29 @@ export class ParticleGenerator {
         return allParticles;
     }
 
-    generateForShape(shape: ShapeSetting): Particle[] {
-        const { size, opacity, colour, number } = shape;
-
-        const renderColour: RGBAColour = RGBAColour.fromHex(colour, opacity.value);
+    generateForShape(shapeSetting: ShapeSetting): Particle[] {
+        const { size, opacity, colour, number, type } = shapeSetting;
 
         let factory: () => Particle;
 
-        switch (shape.type) {
+        switch (type) {
             case 'circle':
-                factory = () => new Circle(
-                    this.generateRandomPosition(shape.size.value),
-                    size.value,
-                    renderColour,
-                    this.calculateVelocity()
-                );
+                factory = () => this.generateCircle(size.value, colour, opacity.value);
                 break;
             case 'square':
-                factory = () => new Square(
-                    this.generateRandomPosition(shape.size.value),
-                    size.value,
-                    renderColour,
-                    this.calculateVelocity()
-                );
+                factory = () => this.generateSquare(size.value, colour, opacity.value);
                 break;
             case 'triangle':
-                factory = () => new Triangle(
-                    this.generateRandomPosition(shape.size.value),
-                    size.value,
-                    renderColour,
-                    this.calculateVelocity()
-                );
+                factory = () => this.generateTriangle(size.value, colour, opacity.value);
                 break;
             case 'polygon':
-                factory = () => {
-                    const polygon = <PolygonSetting> shape;
-
-                    return new Polygon(
-                        this.generateRandomPosition(shape.size.value),
-                        size.value,
-                        renderColour,
-                        polygon.sides,
-                        this.calculateVelocity()
-                    );
-                };
+                factory = () => this.generatePolygon(shapeSetting);
                 break;
             case 'star':
-                factory = () => new Star(
-                    this.generateRandomPosition(shape.size.value),
-                    size.value,
-                    renderColour,
-                    this.calculateVelocity()
-                );
+                factory = () => this.generateStar(size.value, colour, opacity.value);
                 break;
             default:
-                throw new Error(`Invalid shape.type \`${shape.type}\` was given.`);
+                throw new Error(`Invalid shape.type \`${type}\` was given.`);
         }
 
         const particles: Particle[] = [];
@@ -98,13 +66,13 @@ export class ParticleGenerator {
             const particle = factory();
 
             // Handle the opacity animation
-            if (shape.opacity.animation !== undefined) {
-                const { speed, min, synced } = shape.opacity.animation;
+            if (opacity.animation !== undefined) {
+                const { speed, min, synced } = opacity.animation;
 
                 particle.opacityAnimation = new OpacityAnimation(
-                    speed,
+                    speed / 100,
                     min,
-                    shape.opacity.value
+                    opacity.value
                 );
 
                 if (!synced) {
@@ -118,84 +86,51 @@ export class ParticleGenerator {
         return particles;
     }
 
-    private calculateVelocity(): Velocity {
-        const movement = this.config.movement;
-
-        if (!movement.enabled) {
-            return new Velocity(0, 0);
-        }
-
-        let baseX: number,
-            baseY: number;
-
-        switch (movement.direction) {
-            case 'top':
-                baseX = 0;
-                baseY = -1;
-                break;
-            case 'top-right':
-                baseX = 1;
-                baseY = -1;
-                break;
-            case 'right':
-                baseX = 1;
-                baseY = 0;
-                break;
-            case 'bottom-right':
-                baseX = 1;
-                baseY = 1;
-                break;
-            case 'bottom':
-                baseX = 0;
-                baseY = 1;
-                break;
-            case 'bottom-left':
-                baseX = -1;
-                baseY = 1;
-                break;
-            case 'left':
-                baseX = -1;
-                baseY = 0;
-                break;
-            case 'top-left':
-                baseX = -1;
-                baseY = -1;
-                break;
-            default:
-                baseX = 0;
-                baseY = 0;
-                break;
-        }
-
-        if (movement.type === 'random') {
-            baseX = baseX + (2 * Math.random()) - 1;
-            baseY = baseY + (2 * Math.random()) - 1;
-        }
-        
-        return new Velocity(baseX * movement.speed, baseY * movement.speed);
+    private generateCircle(size: number, colour: string, opacity: number): Circle {
+        return new Circle(
+            Position.randomFrom2d(this.canvas.width, this.canvas.height, size),
+            size,
+            RGBAColour.fromHex(colour, opacity),
+            Velocity.fromConfig(this.config.movement)
+        );
     }
 
-    private generateRandomPosition(size: number): Position {
-        const canvasMaxWidth = this.canvas.width - size;
-        const canvasMaxHeight = this.canvas.height - size;
-        const relativeWidthSize = size / this.canvas.width;
-        const relativeHeightSize = size / this.canvas.height;
+    private generateTriangle(size: number, colour: string, opacity: number): Triangle {
+        return new Triangle(
+            Position.randomFrom2d(this.canvas.width, this.canvas.height, size),
+            size,
+            RGBAColour.fromHex(colour, opacity),
+            Velocity.fromConfig(this.config.movement)
+        );
+    }
 
-        // Generate a random coordinate
-        let x = Math.random();
-        let y = Math.random();
+    private generateSquare(size: number, colour: string, opacity: number): Square {
+        return new Square(
+            Position.randomFrom2d(this.canvas.width, this.canvas.height, size),
+            size,
+            RGBAColour.fromHex(colour, opacity),
+            Velocity.fromConfig(this.config.movement)
+        )
+    }
 
-        const normalX = this.canvas.normalizeX(x);
-        const normalY = this.canvas.normalizeY(y);
+    private generatePolygon(shape: ShapeSetting): Polygon {
+        const polygon = <PolygonSetting> shape;
 
-        // Make sure that the coordinate does not make an edge of any
-        // particle fall outside of the actual canvas
-        x = (normalX + size) > canvasMaxWidth ? x - relativeWidthSize : x;
-        y = (normalY + size) > canvasMaxHeight ? y - relativeHeightSize : y;
+        return new Polygon(
+            Position.randomFrom2d(this.canvas.width, this.canvas.height, shape.size.value),
+            shape.size.value,
+            RGBAColour.fromHex(shape.colour, shape.opacity.value),
+            polygon.sides,
+            Velocity.fromConfig(this.config.movement)
+        );
+    }
 
-        x = (normalX - size) < 0 ? x + relativeWidthSize : x;
-        y = (normalY - size) < 0 ? y + relativeHeightSize : y;
-
-        return new Position(x, y);
+    private generateStar(size: number, colour: string, opacity: number): Star {
+        return new Star(
+            Position.randomFrom2d(this.canvas.width, this.canvas.height, size),
+            size,
+            RGBAColour.fromHex(colour, opacity),
+            Velocity.fromConfig(this.config.movement)
+        );
     }
 }

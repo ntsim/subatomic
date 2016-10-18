@@ -81,23 +81,12 @@ export class Subatomic {
         this.canvas.clear();
 
         this.particles.forEach((particle, key) => {
-            // if (key === 0) {
-            //     console.log('PARTICLE ' + key);
-            //     console.log('COLOUR => ', particle.colour.a);
-            //     if (particle.opacityAnimation.speed > 0) {
-            //         console.log('SPEED => ', particle.opacityAnimation.speed);
-            //     } else {
-            //         console.error('SPEED => ', particle.opacityAnimation.speed);
-            //     }
-            //     console.log('MIN MAX => ', particle.opacityAnimation.min, particle.opacityAnimation.max);
-            // }
-
             if (this.config.movement.enabled) {
                 this.manipulator.moveParticle(particle, this.config.movement.bounce);
             }
 
             if (particle.opacityAnimation !== undefined) {
-                particle.animateOpacity();
+                this.manipulator.animateParticleOpacity(particle);
             }
 
             particle.drawToCanvas(this.canvas);

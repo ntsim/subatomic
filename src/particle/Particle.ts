@@ -1,4 +1,5 @@
 import { Canvas } from '../Canvas';
+import MovementSetting = SubatomicConfig.MovementSetting;
 
 export abstract class Particle {
     constructor(
@@ -10,31 +11,103 @@ export abstract class Particle {
     ) {}
 
     abstract drawToCanvas(canvas: Canvas): void;
-
-    animateOpacity(): void {
-        const { speed, min, max, reverse, range } = this.opacityAnimation;
-        const relativeSpeed = speed / 100;
-
-        if (this.colour.a <= min) {
-            this.opacityAnimation.reverse = true;
-        } else if (this.colour.a >= max) {
-            this.opacityAnimation.reverse = false;
-        }
-
-        this.colour.a = reverse ? this.colour.a + relativeSpeed : this.colour.a - relativeSpeed;
-
-        if (this.colour.a < 0) {
-            this.colour.a = 0;
-        }
-    }
 }
 
 export class Position {
     constructor(public x: number, public y: number) {}
+
+    /**
+     * Generate a particle Position from a provided width and height (i.e. a canvas).
+     * This can then be used to
+     * @param width
+     * @param height
+     * @param particleSize if Position should have a
+     * @returns {Position}
+     */
+    static randomFrom2d(width: number, height: number, particleSize?: number) {
+        const maxWidth = width - particleSize;
+        const maxHeight = height - particleSize;
+        const relativeWidthSize = particleSize / width;
+        const relativeHeightSize = particleSize / height;
+
+        // Generate a random coordinate
+        let x = Math.random();
+        let y = Math.random();
+
+        const normalX = Math.round(x * maxWidth);
+        const normalY = Math.round(y * maxHeight);
+
+        if (particleSize) {
+            // Make sure that the coordinate does not make an edge of any
+            // particle fall outside of the actual canvas
+            x = (normalX + particleSize) > maxWidth ? x - relativeWidthSize : x;
+            y = (normalY + particleSize) > maxHeight ? y - relativeHeightSize : y;
+
+            x = (normalX - particleSize) < 0 ? x + relativeWidthSize : x;
+            y = (normalY - particleSize) < 0 ? y + relativeHeightSize : y;
+        }
+
+        return new Position(x, y);
+    }
 }
 
 export class Velocity {
     constructor(public dX: number, public dY: number) {}
+
+    static fromConfig(movement: MovementSetting): Velocity {
+        if (!movement.enabled) {
+            return new Velocity(0, 0);
+        }
+
+        let baseX: number,
+            baseY: number;
+
+        switch (movement.direction) {
+            case 'top':
+                baseX = 0;
+                baseY = -1;
+                break;
+            case 'top-right':
+                baseX = 1;
+                baseY = -1;
+                break;
+            case 'right':
+                baseX = 1;
+                baseY = 0;
+                break;
+            case 'bottom-right':
+                baseX = 1;
+                baseY = 1;
+                break;
+            case 'bottom':
+                baseX = 0;
+                baseY = 1;
+                break;
+            case 'bottom-left':
+                baseX = -1;
+                baseY = 1;
+                break;
+            case 'left':
+                baseX = -1;
+                baseY = 0;
+                break;
+            case 'top-left':
+                baseX = -1;
+                baseY = -1;
+                break;
+            default:
+                baseX = 0;
+                baseY = 0;
+                break;
+        }
+
+        if (movement.type === 'random') {
+            baseX = baseX + (2 * Math.random()) - 1;
+            baseY = baseY + (2 * Math.random()) - 1;
+        }
+
+        return new Velocity(baseX * movement.speed, baseY * movement.speed);
+    }
 }
 
 export class OpacityAnimation {
