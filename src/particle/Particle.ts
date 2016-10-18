@@ -128,6 +128,7 @@ export class OpacityAnimation {
         max: number = 1,
         public reverse: boolean = false
     ) {
+        // Speed is a percentage (per frame) of the opacity animation range
         this.speed = (max - min) * speed;
         this.min = min;
         this.max = max;
@@ -146,6 +147,13 @@ export class RGBAColour {
         return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
     }
 
+    /**
+     * Generate an RGBA colour from the provided hex colour and an opacity.
+     *
+     * @param hexColour
+     * @param opacity
+     * @returns {RGBAColour}
+     */
     static fromHex(hexColour: string, opacity: number = 1.0): RGBAColour {
         if (opacity > 1 || opacity < 0) {
             throw new Error('Opacity cannot be greater than 1 or less than 0.');
