@@ -13,19 +13,31 @@ export class ParticleManipulator {
         let xWasHit = false,
             yWasHit = false;
 
-        if (nextX > 1) {
-            nextX = canBounce ? 1 : 0;
+        const sizeRelativeX = particle.size / this.canvas.width;
+        const sizeRelativeY = particle.size / this.canvas.height;
+
+        const maxEdgeX =
+            canBounce ? 1 - sizeRelativeX : 1 + sizeRelativeX;
+        const minEdgeX =
+            canBounce ? sizeRelativeX : 0 - sizeRelativeX;
+        const maxEdgeY =
+            canBounce ? 1 - sizeRelativeY : 1 + sizeRelativeY;
+        const minEdgeY =
+            canBounce ? sizeRelativeY : 0 - sizeRelativeY;
+
+        if (nextX > maxEdgeX) {
+            nextX = canBounce ? maxEdgeX : minEdgeX;
             xWasHit = true;
-        } else if (nextX < 0) {
-            nextX = canBounce ? 0 : 1;
+        } else if (nextX < minEdgeX) {
+            nextX = canBounce ? minEdgeX : maxEdgeX;
             xWasHit = true;
         }
 
-        if (nextY > 1) {
-            nextY = canBounce ? 1 : 0;
+        if (nextY > maxEdgeY) {
+            nextY = canBounce ? maxEdgeY : minEdgeY;
             yWasHit = true;
-        } else if (nextY < 0) {
-            nextY = canBounce ? 0 : 1;
+        } else if (nextY < minEdgeY) {
+            nextY = canBounce ? minEdgeY : maxEdgeY;
             yWasHit = true;
         }
 

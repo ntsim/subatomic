@@ -110,7 +110,7 @@ export class ParticleGenerator {
             size,
             RGBAColour.fromHex(colour, opacity),
             Velocity.fromConfig(this.config.movement)
-        )
+        );
     }
 
     private generatePolygon(shape: ShapeSetting): Polygon {
