@@ -67,17 +67,17 @@ export class ParticleGenerator {
 
             // Handle the opacity animation
             if (opacity.animation !== undefined) {
-                const { speed, min, synced } = opacity.animation;
+                let { speed, min, synced } = opacity.animation;
+
+                if (!synced) {
+                    speed *= Math.random();
+                }
 
                 particle.opacityAnimation = new OpacityAnimation(
                     speed / 100,
                     min,
                     opacity.value
                 );
-
-                if (!synced) {
-                    particle.opacityAnimation.speed *= Math.random();
-                }
             }
 
             particles.push(particle);

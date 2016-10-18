@@ -42,7 +42,7 @@ export class ParticleManipulator {
     }
 
     animateParticleOpacity(particle: Particle): void {
-        const { speed, min, max, reverse, range } = particle.opacityAnimation;
+        const { speed, min, max, reverse } = particle.opacityAnimation;
 
         if (particle.colour.a <= min) {
             particle.opacityAnimation.reverse = true;

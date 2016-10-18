@@ -17,8 +17,9 @@ export class Position {
     constructor(public x: number, public y: number) {}
 
     /**
-     * Generate a particle Position from a provided width and height (i.e. a canvas).
-     * This can then be used to
+     * Generate a particle Position from a provided 2d space (i.e. a canvas). A particle
+     * radius can be added to avoid a collision with the walls of the 2d space.
+     *
      * @param width
      * @param height
      * @param particleSize if Position should have a
@@ -54,6 +55,12 @@ export class Position {
 export class Velocity {
     constructor(public dX: number, public dY: number) {}
 
+    /**
+     * Generate a particle Velocity from the provided MovementSetting in the SubatomicConfig.
+     *
+     * @param movement
+     * @returns {Velocity}
+     */
     static fromConfig(movement: MovementSetting): Velocity {
         if (!movement.enabled) {
             return new Velocity(0, 0);
@@ -111,15 +118,19 @@ export class Velocity {
 }
 
 export class OpacityAnimation {
-    readonly range: number;
+    public readonly speed: number;
+    public readonly min: number;
+    public readonly max: number;
 
     constructor(
-        public speed: number,
-        public min: number = 0,
-        public max: number = 1,
+        speed: number,
+        min: number = 0,
+        max: number = 1,
         public reverse: boolean = false
     ) {
-        this.range = max - min;
+        this.speed = (max - min) * speed;
+        this.min = min;
+        this.max = max;
     }
 }
 
