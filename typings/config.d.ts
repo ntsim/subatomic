@@ -44,7 +44,7 @@ declare namespace SubatomicConfig {
     export interface OpacityAnimationSetting {
         min: number;
         speed: number;
-        allSynced: boolean;
+        synced: boolean;
     }
 
     export interface AnimationSetting {

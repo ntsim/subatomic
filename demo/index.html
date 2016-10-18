@@ -19,14 +19,16 @@
                 type: 'circle',
                 number: 40,
                 colour: '#ffffff',
-                sides: 5,
                 size: {
-                    value: 4,
+                    value: 20,
                 },
                 opacity: {
-                    value: 0.8,
+                    value:
+                    0.5,
                     animation: {
-                        speed: 1
+                        min: 0.1,
+                        speed: 1,
+                        synced: false,
                     }
                 }
             },
@@ -42,6 +44,7 @@
 //            }
         ],
         movement: {
+            speed: 0.0005,
             type: 'random',
             direction: 'top',
             bounce: false,

@@ -41,7 +41,8 @@ export class Subatomic {
     }
 
     start(): void {
-        this.currentFrame = window.requestAnimationFrame(this.performRender.bind(this));
+        this.performRender();
+        this.currentFrame = window.requestAnimationFrame(this.start.bind(this));
     }
 
     halt(): void {
@@ -68,13 +69,29 @@ export class Subatomic {
 
     private prepareForRender(): void {
         this.particles = this.generator.generateParticles();
-        this.performRender();
+
+        this.start();
+
+        if (!this.config.movement.enabled) {
+            this.halt();
+        }
     }
 
     private performRender(): void {
         this.canvas.clear();
 
-        this.particles.forEach((particle) => {
+        this.particles.forEach((particle, key) => {
+            // if (key === 0) {
+            //     console.log('PARTICLE ' + key);
+            //     console.log('COLOUR => ', particle.colour.a);
+            //     if (particle.opacityAnimation.speed > 0) {
+            //         console.log('SPEED => ', particle.opacityAnimation.speed);
+            //     } else {
+            //         console.error('SPEED => ', particle.opacityAnimation.speed);
+            //     }
+            //     console.log('MIN MAX => ', particle.opacityAnimation.min, particle.opacityAnimation.max);
+            // }
+
             if (this.config.movement.enabled) {
                 this.manipulator.moveParticle(particle, this.config.movement.bounce);
             }
@@ -85,11 +102,5 @@ export class Subatomic {
 
             particle.drawToCanvas(this.canvas);
         });
-
-        this.start();
-
-        if (!this.config.movement.enabled) {
-            this.halt();
-        }
     }
 }

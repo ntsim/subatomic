@@ -12,25 +12,25 @@ export abstract class Particle {
     abstract drawToCanvas(canvas: Canvas): void;
 
     animateOpacity(): void {
-        const { speed, min, max } = this.opacityAnimation;
+        const { speed, min, max, reverse, range } = this.opacityAnimation;
         const relativeSpeed = speed / 100;
-        const colourChange = this.colour.a - relativeSpeed;
 
-        if (colourChange <= min) {
-            this.opacityAnimation.speed = -this.opacityAnimation.speed;
-            // this.colour.a = min;
-        } else if (colourChange >= max) {
-            this.opacityAnimation.speed = -this.opacityAnimation.speed;
-            // this.colour.a = max;
+        if (this.colour.a <= min) {
+            this.opacityAnimation.reverse = true;
+        } else if (this.colour.a >= max) {
+            this.opacityAnimation.reverse = false;
         }
 
-        this.colour.a = colourChange;
+        this.colour.a = reverse ? this.colour.a + relativeSpeed : this.colour.a - relativeSpeed;
+
+        if (this.colour.a < 0) {
+            this.colour.a = 0;
+        }
     }
 }
 
 export class Position {
-    constructor(public x: number, public y: number) {
-    }
+    constructor(public x: number, public y: number) {}
 }
 
 export class Velocity {
@@ -38,7 +38,16 @@ export class Velocity {
 }
 
 export class OpacityAnimation {
-    constructor(public speed: number, public min: number = 0, public max: number = 1) {}
+    readonly range: number;
+
+    constructor(
+        public speed: number,
+        public min: number = 0,
+        public max: number = 1,
+        public reverse: boolean = false
+    ) {
+        this.range = max - min;
+    }
 }
 
 export class RGBAColour {
