@@ -50,12 +50,15 @@ export class Subatomic {
 
     start(): void {
         this.currentFrameStart = Date.now();
-        this.performRender();
+        this.renderFrame();
         this.currentFrame = window.requestAnimationFrame(this.start.bind(this));
         this.lastFrameStart = this.currentFrameStart;
     }
 
     halt(): void {
+        // Reset record of when the last frame was rendered (as this will
+        // throw off any time-dependent calculations)
+        this.lastFrameStart = 0;
         window.cancelAnimationFrame(this.currentFrame);
     }
 
@@ -87,13 +90,13 @@ export class Subatomic {
         }
     }
 
-    private performRender(): void {
+    private renderFrame(): void {
         this.canvas.clear();
 
         // Calculate the time difference between the current frame and the last
         // frame so we can perform time-dependent changes more consistently
         // (otherwise we might be working off any arbitrary scale).
-        const deltaTime = (this.currentFrameStart - this.lastFrameStart) / 1000 || 0;
+        const deltaTime = this.lastFrameStart > 0 ? ((this.currentFrameStart - this.lastFrameStart) / 1000) : 0;
 
         this.particles.forEach((particle, key) => {
             if (this.config.movement.enabled) {
