@@ -3,6 +3,7 @@ import {
     Position,
     RGBAColour,
     OpacityAnimation,
+    SizeAnimation,
     Velocity,
     Star,
     Polygon,
@@ -74,6 +75,21 @@ export class ParticleGenerator {
                     speed,
                     min,
                     opacity.value
+                );
+            }
+
+            // Handle the resizing animation
+            if (size.animation !== undefined) {
+                let { speed, min, synced } = opacity.animation;
+
+                if (!synced) {
+                    speed *= Math.random();
+                }
+
+                particle.sizeAnimation = new SizeAnimation(
+                    speed,
+                    min,
+                    size.value
                 );
             }
 

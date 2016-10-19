@@ -1,6 +1,6 @@
 import { Circle } from './Circle';
 import { Image } from './Image';
-import { Particle, Position, RGBAColour, Velocity, OpacityAnimation } from './Particle';
+import { Particle, Position, RGBAColour, Velocity, OpacityAnimation, SizeAnimation } from './Particle';
 import { Polygon } from './Polygon';
 import { Square } from './Square';
 import { Star } from './Star';
@@ -14,6 +14,7 @@ export {
     RGBAColour,
     Velocity,
     OpacityAnimation,
+    SizeAnimation,
     Polygon,
     Square,
     Star,

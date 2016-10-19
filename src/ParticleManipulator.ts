@@ -56,6 +56,23 @@ export class ParticleManipulator {
         particle.position.y = nextY;
     }
 
+    animateParticleSize(particle: Particle, deltaTime: number): void {
+        const { speed, min, max, reverse } = particle.sizeAnimation;
+
+        if (particle.size <= min) {
+            particle.sizeAnimation.reverse = true;
+        } else if (particle.size >= max) {
+            particle.sizeAnimation.reverse = false;
+        }
+
+        particle.size =
+            reverse ? particle.size + (speed * deltaTime) : particle.size - (speed * deltaTime);
+
+        if (particle.size < 0) {
+            particle.size = 0;
+        }
+    }
+
     animateParticleOpacity(particle: Particle, deltaTime: number): void {
         const { speed, min, max, reverse } = particle.opacityAnimation;
 

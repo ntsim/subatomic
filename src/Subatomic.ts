@@ -95,6 +95,10 @@ export class Subatomic {
                 this.manipulator.animateParticleOpacity(particle, deltaTime);
             }
 
+            if (particle.sizeAnimation !== undefined) {
+                this.manipulator.animateParticleSize(particle, deltaTime);
+            }
+
             particle.drawToCanvas(this.canvas);
         });
     }

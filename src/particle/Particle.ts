@@ -7,7 +7,8 @@ export abstract class Particle {
         public size: number,
         public colour: RGBAColour,
         public velocity?: Velocity,
-        public opacityAnimation?: OpacityAnimation
+        public opacityAnimation?: OpacityAnimation,
+        public sizeAnimation?: SizeAnimation
     ) {}
 
     abstract drawToCanvas(canvas: Canvas): void;
@@ -119,24 +120,6 @@ export class Velocity {
     constructor(public x: number, public y: number) {}
 }
 
-export class OpacityAnimation {
-    public readonly speed: number;
-    public readonly min: number;
-    public readonly max: number;
-
-    constructor(
-        speed: number,
-        min: number = 0,
-        max: number = 1,
-        public reverse: boolean = false
-    ) {
-        // Speed is a percentage (per frame) of the opacity animation range
-        this.speed = (max - min) * speed / 100;
-        this.min = min;
-        this.max = max;
-    }
-}
-
 export class RGBAColour {
     /**
      * Generate an RGBA colour from the provided hex colour and an opacity.
@@ -178,5 +161,41 @@ export class RGBAColour {
 
     toString(): string {
         return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
+    }
+}
+
+export class OpacityAnimation {
+    readonly speed: number;
+    readonly min: number;
+    readonly max: number;
+
+    constructor(
+        speed: number,
+        min: number = 0,
+        max: number = 1,
+        public reverse: boolean = false
+    ) {
+        // Speed is a percentage (per frame) of the opacity animation range
+        this.speed = (max - min) * speed / 100;
+        this.min = min;
+        this.max = max;
+    }
+}
+
+export class SizeAnimation {
+    readonly speed: number;
+    readonly min: number;
+    readonly max: number;
+
+    constructor(
+        speed: number,
+        min: number = 0,
+        max: number = 1,
+        public reverse: boolean = false
+    ) {
+        // Speed is a percentage (per frame) of the opacity animation range
+        this.speed = (max - min) * speed / 100;
+        this.min = min;
+        this.max = max;
     }
 }
