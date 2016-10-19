@@ -36,8 +36,6 @@ export class Subatomic {
         this.generator = new ParticleGenerator(this.config, this.canvas);
         this.manipulator = new ParticleManipulator(this.canvas);
 
-        console.log('THE CONFIG => ', this.config);
-
         this.init();
     }
 

@@ -20,6 +20,8 @@ export class Canvas {
         this.width = this.element.offsetWidth * window.devicePixelRatio;
 
         this.context = this._element.getContext('2d');
+
+        window.addEventListener('resize', this.onResize.bind(this));
     }
 
     clear(): void {
@@ -161,5 +163,10 @@ export class Canvas {
         this.context.fill();
 
         return this;
+    }
+
+    private onResize(event: Event): void {
+        this.height = this.element.offsetHeight * window.devicePixelRatio;
+        this.width = this.element.offsetWidth * window.devicePixelRatio;
     }
 }
