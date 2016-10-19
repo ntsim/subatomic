@@ -5,17 +5,8 @@ import LinkSetting = SubatomicConfig.LinkSetting;
 export const SHAPE_DEFAULTS: ShapeSetting = {
     colour: '#ffffff',
     number: 20,
-    opacity: {
-        animation: {
-            min: 0.1,
-            speed: 1,
-            synced: false,
-        },
-        value: 1,
-    },
-    size: {
-        value: 3,
-    },
+    opacity: 1,
+    size: 3,
     type: 'circle',
 };
 

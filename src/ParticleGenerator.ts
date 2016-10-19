@@ -40,19 +40,19 @@ export class ParticleGenerator {
 
         switch (type) {
             case 'circle':
-                factory = () => this.generateCircle(size.value, colour, opacity.value);
+                factory = () => this.generateCircle(size, colour, opacity);
                 break;
             case 'square':
-                factory = () => this.generateSquare(size.value, colour, opacity.value);
+                factory = () => this.generateSquare(size, colour, opacity);
                 break;
             case 'triangle':
-                factory = () => this.generateTriangle(size.value, colour, opacity.value);
+                factory = () => this.generateTriangle(size, colour, opacity);
                 break;
             case 'polygon':
                 factory = () => this.generatePolygon(shapeSetting);
                 break;
             case 'star':
-                factory = () => this.generateStar(size.value, colour, opacity.value);
+                factory = () => this.generateStar(size, colour, opacity);
                 break;
             default:
                 throw new Error(`Invalid shape.type \`${type}\` was given.`);
@@ -64,8 +64,8 @@ export class ParticleGenerator {
             const particle = factory();
 
             // Handle the opacity animation
-            if (opacity.animation !== undefined) {
-                let { speed, min, synced } = opacity.animation;
+            if (shapeSetting.opacityAnimation !== undefined) {
+                let { speed, min, synced } = shapeSetting.opacityAnimation;
 
                 if (!synced) {
                     speed *= Math.random();
@@ -74,13 +74,13 @@ export class ParticleGenerator {
                 particle.opacityAnimation = new OpacityAnimation(
                     speed,
                     min,
-                    opacity.value
+                    opacity
                 );
             }
 
             // Handle the resizing animation
-            if (size.animation !== undefined) {
-                let { speed, min, synced } = opacity.animation;
+            if (shapeSetting.sizeAnimation !== undefined) {
+                let { speed, min, synced } = shapeSetting.sizeAnimation;
 
                 if (!synced) {
                     speed *= Math.random();
@@ -89,7 +89,7 @@ export class ParticleGenerator {
                 particle.sizeAnimation = new SizeAnimation(
                     speed,
                     min,
-                    size.value
+                    size
                 );
             }
 
@@ -130,9 +130,9 @@ export class ParticleGenerator {
         const polygon = <PolygonSetting> shape;
 
         return new Polygon(
-            Position.randomFrom2d(this.canvas.width, this.canvas.height, shape.size.value),
-            shape.size.value,
-            RGBAColour.fromHex(shape.colour, shape.opacity.value),
+            Position.randomFrom2d(this.canvas.width, this.canvas.height, shape.size),
+            shape.size,
+            RGBAColour.fromHex(shape.colour, shape.opacity),
             polygon.sides,
             Velocity.fromConfig(this.config.movement)
         );

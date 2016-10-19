@@ -3,6 +3,7 @@ import { deepMerge } from './util';
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import MovementSetting = SubatomicConfig.MovementSetting;
 import LinkSetting = SubatomicConfig.LinkSetting;
+import OscillatingAnimationSetting = SubatomicConfig.OscillatingAnimationSetting;
 
 const ALLOWED_SHAPES = [
     'circle',
@@ -47,31 +48,29 @@ function handleShape(shape: ShapeSetting): ShapeSetting {
         throw new Error('Config must provide a valid non-empty shape.type property.');
     }
 
-    if (shape.opacity !== undefined && typeof shape.opacity !== 'object') {
-        throw new Error('Config must provide an object for the shape.opacity property.');
-    }
-
-    if (shape.size !== undefined && typeof shape.size !== 'object') {
-        throw new Error('Config must provide an object for the shape.size property.');
-    }
-
-    if (shape.opacity.value < 0 || shape.opacity.value > 1) {
+    if (shape.opacity < 0 || shape.opacity > 1) {
         throw new Error('Config must provide a shape.opacity.value greater than 0 and less than 1.');
     }
 
-    if (shape.opacity.animation !== undefined) {
-        const opacityAnimation = shape.opacity.animation;
+    if (shape.opacityAnimation !== undefined) {
+        checkOscillatingAnimationSetting(shape.opacityAnimation, 'shape.opacityAnimation');
+    }
 
-        if (opacityAnimation.min > shape.opacity.value) {
-            throw new Error('Config must provide a shape.opacity.animation.min less than the shape.opacity.value.');
-        }
-
-        if (opacityAnimation.min < 0) {
-            throw new Error('Config must provide a shape.opacity.animation.min greater than 0.');
-        }
+    if (shape.sizeAnimation !== undefined) {
+        checkOscillatingAnimationSetting(shape.sizeAnimation, 'shape.sizeAnimation');
     }
 
     return deepMerge(SHAPE_DEFAULTS, shape);
+}
+
+function checkOscillatingAnimationSetting(animation: OscillatingAnimationSetting, animProp: string): void {
+    if (animation.min > animation.max) {
+        throw new Error(`Config must provide a ${animProp}.min less than the ${animProp}.max.`);
+    }
+
+    if (animation.min < 0) {
+        throw new Error(`Config must provide a ${animProp}.min greater than 0.`);
+    }
 }
 
 function handleMovement(movement: MovementSetting): MovementSetting {

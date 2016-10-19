@@ -1,8 +1,6 @@
 declare namespace SubatomicConfig {
     export interface Root {
         shapes: ShapeSetting[];
-        opacity?: OpacitySetting;
-        size?: SizeSetting;
         movement?: MovementSetting;
         link?: LinkSetting;
     }
@@ -17,8 +15,10 @@ declare namespace SubatomicConfig {
         number?: number;
         density?: number;
         colour?: string;
-        opacity?: OpacitySetting;
-        size?: SizeSetting;
+        opacity?: number;
+        opacityAnimation?: OscillatingAnimationSetting;
+        size?: number;
+        sizeAnimation?: OscillatingAnimationSetting;
     }
 
     export interface ImageSetting extends ShapeSetting {
@@ -31,24 +31,11 @@ declare namespace SubatomicConfig {
         sides: number;
     }
 
-    export interface OpacitySetting {
-        value: number;
-        animation?: OpacityAnimationSetting;
-    }
-
-    export interface SizeSetting {
-        value: number;
-        animation?: AnimationSetting;
-    }
-
-    export interface OpacityAnimationSetting {
+    export interface OscillatingAnimationSetting {
+        max: number;
         min: number;
         speed: number;
         synced: boolean;
-    }
-
-    export interface AnimationSetting {
-        speed: number;
     }
 
     export interface MovementSetting {
