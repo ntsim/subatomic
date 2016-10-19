@@ -14,8 +14,6 @@ export abstract class Particle {
 }
 
 export class Position {
-    constructor(public x: number, public y: number) {}
-
     /**
      * Generate a particle Position from a provided 2d space (i.e. a canvas). A particle
      * radius can be added to avoid a collision with the walls of the 2d space.
@@ -50,11 +48,11 @@ export class Position {
 
         return new Position(x, y);
     }
+
+    constructor(public x: number, public y: number) {}
 }
 
 export class Velocity {
-    constructor(public x: number, public y: number) {}
-
     /**
      * Generate a particle Velocity from the provided MovementSetting in the SubatomicConfig.
      *
@@ -66,8 +64,8 @@ export class Velocity {
             return new Velocity(0, 0);
         }
 
-        let baseX: number,
-            baseY: number;
+        let baseX: number;
+        let baseY: number;
 
         switch (movement.direction) {
             case 'top':
@@ -117,6 +115,8 @@ export class Velocity {
 
         return new Velocity(baseX * fractionalSpeed, baseY * fractionalSpeed);
     }
+
+    constructor(public x: number, public y: number) {}
 }
 
 export class OpacityAnimation {
@@ -138,17 +138,6 @@ export class OpacityAnimation {
 }
 
 export class RGBAColour {
-    constructor(
-        public r: number = 0,
-        public g: number = 0,
-        public b: number = 0,
-        public a: number = 1
-    ) {}
-
-    toString(): string {
-        return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
-    }
-
     /**
      * Generate an RGBA colour from the provided hex colour and an opacity.
      *
@@ -178,5 +167,16 @@ export class RGBAColour {
             parseInt(result[3], 16),
             +opacity,
         );
+    }
+
+    constructor(
+        public r: number = 0,
+        public g: number = 0,
+        public b: number = 0,
+        public a: number = 1
+    ) {}
+
+    toString(): string {
+        return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
     }
 }

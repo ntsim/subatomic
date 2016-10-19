@@ -5,7 +5,6 @@ import { Particle } from './particle';
 import { ParticleGenerator } from './ParticleGenerator';
 import { ParticleManipulator } from './ParticleManipulator';
 
-import ShapeSetting = SubatomicConfig.ShapeSetting;
 import ImageSetting = SubatomicConfig.ImageSetting;
 
 export class Subatomic {

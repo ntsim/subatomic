@@ -1,7 +1,6 @@
 import { SHAPE_DEFAULTS, MOVEMENT_DEFAULTS, LINK_DEFAULTS } from './defaults';
 import { deepMerge } from './util';
 import ShapeSetting = SubatomicConfig.ShapeSetting;
-import SizeSetting = SubatomicConfig.SizeSetting;
 import MovementSetting = SubatomicConfig.MovementSetting;
 import LinkSetting = SubatomicConfig.LinkSetting;
 
@@ -11,7 +10,7 @@ const ALLOWED_SHAPES = [
     'triangle',
     'polygon',
     'star',
-    'image'
+    'image',
 ];
 
 /**
@@ -28,9 +27,9 @@ export class ConfigResolver {
      */
     static resolve(config: SubatomicConfig.Root): SubatomicConfig.Root {
         return {
-            shapes: handleShapes(config.shapes),
-            movement: handleMovement(config.movement),
             link: handleLink(config.link),
+            movement: handleMovement(config.movement),
+            shapes: handleShapes(config.shapes),
         };
     }
 }

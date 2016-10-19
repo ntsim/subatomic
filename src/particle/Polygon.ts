@@ -10,7 +10,7 @@ export class Polygon extends Particle {
         public sides: number,
         public velocity: Velocity
     ) {
-        super(position, size, colour,velocity);
+        super(position, size, colour, velocity);
     }
 
     drawToCanvas(canvas: Canvas): void {

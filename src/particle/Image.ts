@@ -1,5 +1,3 @@
-
-
 export class Image {
     private src: string;
 

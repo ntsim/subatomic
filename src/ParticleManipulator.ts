@@ -10,8 +10,8 @@ export class ParticleManipulator {
 
         // Keep track of if an edge was hit so that we can
         // swap the direction of the particle accordingly
-        let xWasHit = false,
-            yWasHit = false;
+        let xWasHit = false;
+        let yWasHit = false;
 
         const sizeRelativeX = particle.size / this.canvas.width;
         const sizeRelativeY = particle.size / this.canvas.height;
@@ -66,7 +66,7 @@ export class ParticleManipulator {
         }
 
         particle.colour.a =
-            reverse ? particle.colour.a + (speed * deltaTime): particle.colour.a - (speed * deltaTime);
+            reverse ? particle.colour.a + (speed * deltaTime) : particle.colour.a - (speed * deltaTime);
 
         if (particle.colour.a < 0) {
             particle.colour.a = 0;

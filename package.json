@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack --progress",
     "dev:server": "webpack-dev-server",
+    "lint": "tslint src/**/*.ts typings/**/*.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -17,6 +18,8 @@
     "object.assign": "^4.0.4",
     "raf": "^3.3.0",
     "ts-loader": "^0.9.1",
+    "tslint": "^3.15.1",
+    "tslint-loader": "^2.1.5",
     "typescript": "^2.0.3",
     "webpack": "^2.1.0-beta.25",
     "webpack-dev-server": "^2.1.0-beta.9"

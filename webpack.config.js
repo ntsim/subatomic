@@ -15,8 +15,13 @@ module.exports = {
         loaders: [
             {
                 test: /\.ts?$/,
+                loader: 'tslint',
+                enforce: "pre",
+            },
+            {
+                test: /\.ts?$/,
                 loader: 'ts-loader',
-                exclude: /node_modules/
+                exclude: /node_modules/,
             }
         ]
     },

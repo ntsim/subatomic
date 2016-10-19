@@ -11,7 +11,7 @@ export class SubatomicDOM {
     constructor(instances: Subatomic[] = []) {
         this.instances = {};
         instances.forEach(instance => {
-            this.instances[instance.id] = instance
+            this.instances[instance.id] = instance;
         });
 
         window.addEventListener('resize', this.onResize.bind(this));

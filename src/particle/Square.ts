@@ -1,4 +1,4 @@
-import { Particle, Position } from './Particle';
+import { Particle } from './Particle';
 import { Canvas } from '../Canvas';
 
 export class Square extends Particle {

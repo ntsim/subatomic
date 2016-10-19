@@ -4,8 +4,8 @@ import { toRadians } from './util';
  * Wrapper for HTMLCanvasElement. Must be mounted (appended) to an existing HTMLElement.
  */
 export class Canvas {
-    private _element: HTMLCanvasElement;
     readonly context: CanvasRenderingContext2D;
+    private _element: HTMLCanvasElement;
 
     constructor(mountElement: HTMLElement, width: string, height: string, className: string) {
         this._element = document.createElement('canvas');

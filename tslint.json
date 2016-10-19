@@ -1,0 +1,10 @@
+{
+  "extends": "tslint:recommended",
+  "rules": {
+    "quotemark": [true, "single"],
+    "member-access": false,
+    "variable-name": [true, "check-format", "allow-leading-underscore"],
+    "interface-name": false,
+    "no-namespace": [true, "allow-declarations"]
+  }
+}

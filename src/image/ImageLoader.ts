@@ -2,7 +2,6 @@ import Svg from './Svg';
 
 export class ImageLoader {
     requests: { [src: string]: XMLHttpRequest } = {};
-    errors: { [src: string]: string } = {};
     svgs: { [src: string]: Svg } = {};
     renderedImages: { [src: string]: HTMLElement } = {};
 
@@ -47,10 +46,6 @@ export class ImageLoader {
         return Object.keys(this.renderedImages).length;
     }
 
-    get errorCount(): number {
-        return Object.keys(this.errors).length;
-    }
-
     private loadSvg(src: string, callback?: () => void): void {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', src);
@@ -84,11 +79,7 @@ export class ImageLoader {
         this.requestsDone++;
 
         if (xhr.status !== 200) {
-            console.log(`Error loading image from src: ${src}`);
-
-            this.errors[src] = xhr.statusText;
-
-            return;
+            throw new Error(`Error loading image from src: ${src}`);
         }
 
         this.svgs[src] = new Svg(xhr.responseText);

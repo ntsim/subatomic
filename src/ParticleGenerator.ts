@@ -8,15 +8,12 @@ import {
     Polygon,
     Triangle,
     Square,
-    Circle
+    Circle,
 } from './particle';
 import { Canvas } from './Canvas';
 
 import ShapeSetting = SubatomicConfig.ShapeSetting;
-import OpacitySetting = SubatomicConfig.OpacitySetting;
-import SizeSetting = SubatomicConfig.SizeSetting;
 import PolygonSetting = SubatomicConfig.PolygonSetting;
-import MovementSetting = SubatomicConfig.MovementSetting;
 
 export class ParticleGenerator {
     constructor(public config: SubatomicConfig.Root, public canvas: Canvas) {
