@@ -36,6 +36,15 @@ export class Subatomic {
         this.generator = new ParticleGenerator(this.config, this.canvas);
         this.manipulator = new ParticleManipulator(this.canvas);
 
+        // Stop animating whenever the user isn't actually looking at this page
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.halt();
+            } else {
+                this.start();
+            }
+        });
+
         this.init();
     }
 
