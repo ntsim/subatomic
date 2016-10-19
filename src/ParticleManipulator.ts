@@ -1,4 +1,4 @@
-import { Particle } from './particle';
+import { Particle, Position } from './particle';
 import { Canvas } from './Canvas';
 
 export class ParticleManipulator {
@@ -54,6 +54,23 @@ export class ParticleManipulator {
 
         particle.position.x = nextX;
         particle.position.y = nextY;
+    }
+
+    repulseParticle(particle: Particle, repulsePos: Position, repulseDistance: number): void {
+        const { x, y } = particle.position;
+        const relRepulseDistance = repulseDistance / 100;
+
+        const diffX = x - repulsePos.x;
+        const diffY = y - repulsePos.y;
+
+        // Use Pythagoras to get the distance
+        const p1p2 = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+
+        if (p1p2 < relRepulseDistance) {
+            // const theta = Math.acos(diffY / p1p2);
+            // const remainingY = Math.cos(theta) / (relRepulseDistance - p1p2);
+            // const remainingX = Math.sin(theta) / (relRepulseDistance - p1p2);
+        }
     }
 
     animateParticleSize(particle: Particle, deltaTime: number): void {

@@ -1,6 +1,7 @@
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import MovementSetting = SubatomicConfig.MovementSetting;
-import LinkSetting = SubatomicConfig.LinkSetting;
+import LinkInteractionSetting = SubatomicConfig.LinkInteractionSetting;
+import RepulseInteractionSetting = SubatomicConfig.RepulseInteractionSetting;
 
 export const SHAPE_DEFAULTS: ShapeSetting = {
     colour: '#ffffff',
@@ -18,6 +19,9 @@ export const MOVEMENT_DEFAULTS: MovementSetting = {
     type: 'random',
 };
 
-export const LINK_DEFAULTS: LinkSetting = {
-    enabled: true,
+export const LINK_DEFAULTS: LinkInteractionSetting = {
+};
+
+export const REPULSE_DEFAULTS: RepulseInteractionSetting = {
+    distance: 40,
 };

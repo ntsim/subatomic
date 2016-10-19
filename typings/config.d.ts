@@ -2,7 +2,8 @@ declare namespace SubatomicConfig {
     export interface Root {
         shapes: ShapeSetting[];
         movement?: MovementSetting;
-        link?: LinkSetting;
+        link?: LinkInteractionSetting;
+        onHover?: HoverInteractionSetting;
     }
 
     export interface ShapeSetting {
@@ -54,11 +55,30 @@ declare namespace SubatomicConfig {
         bounce?: boolean;
     }
 
-    export interface LinkSetting {
-        enabled?: boolean;
+    export interface LinkInteractionSetting {
         distance?: number;
         colour?: string;
         opacity?: number;
-        width?: number;
+        thickness?: number;
+    }
+
+    export interface BubbleInteractionSetting {
+        distance?: number;
+        size?: number;
+    }
+
+    export interface RepulseInteractionSetting {
+        distance?: number;
+    }
+
+    export interface AttractInteractionSetting {
+        distance?: number;
+    }
+
+    export interface HoverInteractionSetting {
+        link?: LinkInteractionSetting;
+        bubble?: BubbleInteractionSetting;
+        repulse?: RepulseInteractionSetting;
+        attract?: AttractInteractionSetting;
     }
 }

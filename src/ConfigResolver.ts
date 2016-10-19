@@ -1,9 +1,10 @@
-import { SHAPE_DEFAULTS, MOVEMENT_DEFAULTS, LINK_DEFAULTS } from './defaults';
+import { SHAPE_DEFAULTS, MOVEMENT_DEFAULTS, LINK_DEFAULTS, REPULSE_DEFAULTS } from './defaults';
 import { deepMerge } from './util';
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import MovementSetting = SubatomicConfig.MovementSetting;
-import LinkSetting = SubatomicConfig.LinkSetting;
+import LinkSetting = SubatomicConfig.LinkInteractionSetting;
 import OscillatingAnimationSetting = SubatomicConfig.OscillatingAnimationSetting;
+import HoverInteractionSetting = SubatomicConfig.HoverInteractionSetting;
 
 const ALLOWED_SHAPES = [
     'circle',
@@ -30,6 +31,7 @@ export class ConfigResolver {
         return {
             link: handleLink(config.link),
             movement: handleMovement(config.movement),
+            onHover: handleOnHover(config.onHover),
             shapes: handleShapes(config.shapes),
         };
     }
@@ -79,4 +81,16 @@ function handleMovement(movement: MovementSetting): MovementSetting {
 
 function handleLink(link: LinkSetting): LinkSetting {
     return deepMerge(LINK_DEFAULTS, link || {});
+}
+
+function handleOnHover(onHover: HoverInteractionSetting): HoverInteractionSetting {
+    if (onHover === undefined) {
+        return {};
+    }
+
+    if (onHover.repulse !== undefined) {
+        onHover.repulse = deepMerge(REPULSE_DEFAULTS, onHover.repulse);
+    }
+
+    return onHover;
 }

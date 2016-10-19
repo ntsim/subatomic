@@ -4,6 +4,7 @@ import { ImageLoader } from './image/ImageLoader';
 import { Particle } from './particle';
 import { ParticleGenerator } from './ParticleGenerator';
 import { ParticleManipulator } from './ParticleManipulator';
+import { InteractionListener } from './InteractionListener';
 
 import ImageSetting = SubatomicConfig.ImageSetting;
 
@@ -13,12 +14,15 @@ export class Subatomic {
     canvas: Canvas;
     imageLoader: ImageLoader;
     particles: Particle[] = [];
-    generator: ParticleGenerator;
-    manipulator: ParticleManipulator;
     currentFrame: number;
     currentFrameStart: number;
     lastFrameStart: number;
+
     readonly config: SubatomicConfig.Root;
+
+    private generator: ParticleGenerator;
+    private manipulator: ParticleManipulator;
+    private interactionListener: InteractionListener;
 
     constructor(
         id: string = 'subatomic-container',
@@ -35,15 +39,7 @@ export class Subatomic {
 
         this.generator = new ParticleGenerator(this.config, this.canvas);
         this.manipulator = new ParticleManipulator(this.canvas);
-
-        // Stop animating whenever the user isn't actually looking at this page
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                this.halt();
-            } else {
-                this.start();
-            }
-        });
+        this.interactionListener = new InteractionListener(this.canvas);
 
         this.init();
     }
@@ -63,6 +59,17 @@ export class Subatomic {
     }
 
     private init(): void {
+        this.checkForInteractivity();
+
+        // Stop animating whenever the user isn't actually looking at this page
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.halt();
+            } else {
+                this.start();
+            }
+        });
+
         const srcs = this.config.shapes
             .filter(shape => shape.type === 'image')
             .map(shape => {
@@ -103,6 +110,11 @@ export class Subatomic {
                 this.manipulator.moveParticle(particle, deltaTime, this.config.movement.bounce);
             }
 
+            if (this.config.onHover.repulse && this.interactionListener.hoverPosition) {
+                const distance = this.config.onHover.repulse.distance;
+                this.manipulator.repulseParticle(particle, this.interactionListener.hoverPosition, distance);
+            }
+
             if (particle.opacityAnimation !== undefined) {
                 this.manipulator.animateParticleOpacity(particle, deltaTime);
             }
@@ -113,5 +125,17 @@ export class Subatomic {
 
             particle.drawToCanvas(this.canvas);
         });
+    }
+
+    private checkForInteractivity(): void {
+        let hasInteractivity = false;
+
+        if (Object.keys(this.config.onHover).length > 0) {
+            hasInteractivity = true;
+        }
+
+        if (hasInteractivity) {
+            this.interactionListener.setMouseListeners();
+        }
     }
 }
