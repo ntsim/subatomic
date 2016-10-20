@@ -3,8 +3,8 @@ import { Canvas } from './Canvas';
 
 export class InteractionListener {
     clickTime: number;
-    hoverPosition: Position;
-    clickPosition: Position;
+    hoverPosition: Position = new Position(null, null);
+    clickPosition: Position = new Position(null, null);
 
     private listeningOnMouse: boolean = false;
 
@@ -29,28 +29,23 @@ export class InteractionListener {
     }
 
     private onMouseMove(e: MouseEvent): void {
-        this.hoverPosition.x = (e.offsetX || e.clientX) / this.canvas.width;
-        this.hoverPosition.y = (e.offsetY || e.clientY) / this.canvas.height;
+        this.hoverPosition.x = (e.offsetX || e.clientX) * window.devicePixelRatio / this.canvas.width;
+        this.hoverPosition.y = (e.offsetY || e.clientY) * window.devicePixelRatio / this.canvas.height;
     }
 
     private onMouseEnter(e: MouseEvent): void {
-        const x = (e.offsetX || e.clientX) / this.canvas.width;
-        const y = (e.offsetY || e.clientY) / this.canvas.height;
-
-        this.hoverPosition = new Position(x, y);
+        this.hoverPosition.x = (e.offsetX || e.clientX) * window.devicePixelRatio / this.canvas.width;
+        this.hoverPosition.y = (e.offsetY || e.clientY) * window.devicePixelRatio / this.canvas.height;
     }
 
     private onMouseLeave(e: MouseEvent): void {
-        this.hoverPosition = null;
-        this.clickPosition = null;
+        this.hoverPosition.changeCoordinate(null, null);
     }
 
     private onClick(e: MouseEvent): void {
         this.clickTime = Date.now();
 
-        const x = (e.offsetX || e.clientX) / this.canvas.width;
-        const y = (e.offsetY || e.clientY) / this.canvas.height;
-
-        this.clickPosition = new Position(x, y);
+        this.clickPosition.x = (e.offsetX || e.clientX) * window.devicePixelRatio / this.canvas.width;
+        this.clickPosition.y = (e.offsetY || e.clientY) * window.devicePixelRatio / this.canvas.height;
     }
 }
