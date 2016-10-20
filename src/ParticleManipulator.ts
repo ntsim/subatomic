@@ -52,8 +52,7 @@ export class ParticleManipulator {
             particle.velocity.y = canBounce ? -particle.velocity.y : particle.velocity.y;
         }
 
-        particle.position.x = nextX;
-        particle.position.y = nextY;
+        particle.position.changeCoordinate(nextX, nextY);
     }
 
     repulseParticle(particle: Particle, repulsePos: Position, repulseDistance: number): void {
@@ -63,13 +62,17 @@ export class ParticleManipulator {
         const diffX = x - repulsePos.x;
         const diffY = y - repulsePos.y;
 
-        // Use Pythagoras to get the distance
-        const p1p2 = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+        // Use Pythagoras theorem to get the distance
+        const positionDistance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
 
-        if (p1p2 < relRepulseDistance) {
-            // const theta = Math.acos(diffY / p1p2);
-            // const remainingY = Math.cos(theta) / (relRepulseDistance - p1p2);
-            // const remainingX = Math.sin(theta) / (relRepulseDistance - p1p2);
+        if (positionDistance <= relRepulseDistance) {
+            // Get the relative scale (so we can know the distance) we need to push particles
+            // by to get them to the edge of the repulsion zone
+            const scale = relRepulseDistance / positionDistance;
+
+            // Scale up the x and y distances and add them to the repulsion position
+            particle.position.x = repulsePos.x + (diffX * scale);
+            particle.position.y = repulsePos.y + (diffY * scale);
         }
     }
 
