@@ -3,6 +3,7 @@ import MovementSetting = SubatomicConfig.MovementSetting;
 import LinkInteractionSetting = SubatomicConfig.LinkInteractionSetting;
 import RepulseInteractionSetting = SubatomicConfig.RepulseInteractionSetting;
 import BubbleInteractionSetting = SubatomicConfig.BubbleInteractionSetting;
+import AttractInteractionSetting = SubatomicConfig.AttractInteractionSetting;
 
 export const SHAPE_DEFAULTS: ShapeSetting = {
     colour: '#ffffff',
@@ -30,4 +31,8 @@ export const REPULSE_DEFAULTS: RepulseInteractionSetting = {
 export const BUBBLE_DEFAULTS: BubbleInteractionSetting = {
     distance: 25,
     size: 10,
+};
+
+export const ATTRACT_DEFAULTS: AttractInteractionSetting = {
+    distance: 25,
 };

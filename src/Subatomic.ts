@@ -122,6 +122,11 @@ export class Subatomic {
 
                     this.manipulator.bubbleParticle(particle, hoverPos, distance, size);
                 }
+
+                if (this.config.onHover.attract) {
+                    const distance = this.config.onHover.attract.distance;
+                    this.manipulator.attractParticle(particle, hoverPos, distance);
+                }
             }
 
             if (particle.opacityAnimation !== undefined) {

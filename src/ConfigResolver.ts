@@ -88,12 +88,20 @@ function handleOnHover(onHover: HoverInteractionSetting): HoverInteractionSettin
         return {};
     }
 
+    if (onHover.repulse && onHover.attract) {
+        throw new Error('Config should not set both onHover.repulse and onHover.attract.');
+    }
+
     if (onHover.repulse !== undefined) {
         onHover.repulse = deepMerge(DEFAULTS.REPULSE_DEFAULTS, onHover.repulse);
     }
 
     if (onHover.bubble !== undefined) {
         onHover.bubble = deepMerge(DEFAULTS.BUBBLE_DEFAULTS, onHover.bubble);
+    }
+
+    if (onHover.attract !== undefined) {
+        onHover.attract = deepMerge(DEFAULTS.ATTRACT_DEFAULTS, onHover.attract);
     }
 
     return onHover;

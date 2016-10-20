@@ -93,6 +93,24 @@ export class ParticleManipulator {
         }
     }
 
+    attractParticle(particle: Particle, hoverPosition: Position, distance: number) {
+        const { x, y } = particle.position;
+        // Normalise the distance (it's a percentage)
+        const bubbleDistance = distance / 100;
+
+        const diffX = x - hoverPosition.x;
+        const diffY = y - hoverPosition.y;
+
+        // Use Pythagoras theorem to get the distance
+        const positionDistance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+
+        if (positionDistance <= bubbleDistance) {
+            // Allow the attracted particles to jiggle a bit
+            particle.position.x = hoverPosition.x + (Math.random() * 0.05);
+            particle.position.y = hoverPosition.y + (Math.random() * 0.05);
+        }
+    }
+
     animateParticleSize(particle: Particle, deltaTime: number): void {
         const { speed, min, max, reverse } = particle.sizeAnimation;
 
