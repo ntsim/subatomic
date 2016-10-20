@@ -78,6 +78,10 @@ export class Canvas {
         return this.draw(() => this.context.rect(this.normalizeX(x), this.normalizeY(y), width, height));
     }
 
+    drawLine() {
+
+    }
+
     /**
      * @param x coordinate
      * @param y coordinate
