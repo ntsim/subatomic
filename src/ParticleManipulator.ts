@@ -106,8 +106,8 @@ export class ParticleManipulator {
 
         if (positionDistance <= bubbleDistance) {
             // Allow the attracted particles to jiggle a bit
-            particle.position.x = hoverPosition.x + (Math.random() * 0.05);
-            particle.position.y = hoverPosition.y + (Math.random() * 0.05);
+            particle.position.x = hoverPosition.x + (diffX * Math.random() / 2);
+            particle.position.y = hoverPosition.y + (diffY * Math.random() / 2);
         }
     }
 

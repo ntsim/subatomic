@@ -23,7 +23,7 @@
                 sizeAnimation: {
                     max: 20,
                     min: 2,
-                    speed: 50,
+                    speed: 80,
                     synced: false,
                 },
                 opacity: 0.5,
@@ -52,16 +52,16 @@
             bounce: false,
         },
         onHover: {
-            repulse: {
-                distance: 10
-            },
-            bubble: {
-                distance: 20,
-                size: 50,
-            },
-//            attract: {
+//            repulse: {
 //                distance: 10
-//            }
+//            },
+//            bubble: {
+//                distance: 20,
+//                size: 50,
+//            },
+            attract: {
+                distance: 10
+            }
         }
     });
 </script>
