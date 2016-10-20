@@ -110,9 +110,18 @@ export class Subatomic {
                 this.manipulator.moveParticle(particle, deltaTime, this.config.movement.bounce);
             }
 
-            if (this.config.onHover.repulse && this.interactionListener.hoverPosition) {
-                const distance = this.config.onHover.repulse.distance;
-                this.manipulator.repulseParticle(particle, this.interactionListener.hoverPosition, distance);
+            if (this.interactionListener.hoverPosition) {
+                const hoverPos = this.interactionListener.hoverPosition;
+                if (this.config.onHover.repulse) {
+                    const distance = this.config.onHover.repulse.distance;
+                    this.manipulator.repulseParticle(particle, hoverPos, distance);
+                }
+
+                if (this.config.onHover.bubble) {
+                    const { distance, size } = this.config.onHover.bubble;
+
+                    this.manipulator.bubbleParticle(particle, hoverPos, distance, size);
+                }
             }
 
             if (particle.opacityAnimation !== undefined) {

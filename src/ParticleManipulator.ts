@@ -55,24 +55,41 @@ export class ParticleManipulator {
         particle.position.changeCoordinate(nextX, nextY);
     }
 
-    repulseParticle(particle: Particle, repulsePos: Position, repulseDistance: number): void {
+    repulseParticle(particle: Particle, hoverPosition: Position, distance: number): void {
         const { x, y } = particle.position;
-        const relRepulseDistance = repulseDistance / 100;
+        // Normalise the distance (it's a percentage)
+        const repulseDistance = distance / 100;
 
-        const diffX = x - repulsePos.x;
-        const diffY = y - repulsePos.y;
+        const diffX = x - hoverPosition.x;
+        const diffY = y - hoverPosition.y;
 
         // Use Pythagoras theorem to get the distance
         const positionDistance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
 
-        if (positionDistance <= relRepulseDistance) {
+        if (positionDistance <= repulseDistance) {
             // Get the relative scale (so we can know the distance) we need to push particles
             // by to get them to the edge of the repulsion zone
-            const scale = relRepulseDistance / positionDistance;
+            const scale = repulseDistance / positionDistance;
 
             // Scale up the x and y distances and add them to the repulsion position
-            particle.position.x = repulsePos.x + (diffX * scale);
-            particle.position.y = repulsePos.y + (diffY * scale);
+            particle.position.x = hoverPosition.x + (diffX * scale);
+            particle.position.y = hoverPosition.y + (diffY * scale);
+        }
+    }
+
+    bubbleParticle(particle: Particle, hoverPosition: Position, distance: number, size: number) {
+        const { x, y } = particle.position;
+        // Normalise the distance (it's a percentage)
+        const bubbleDistance = distance / 100;
+
+        const diffX = x - hoverPosition.x;
+        const diffY = y - hoverPosition.y;
+
+        // Use Pythagoras theorem to get the distance
+        const positionDistance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+
+        if (positionDistance <= bubbleDistance) {
+            particle.size = size;
         }
     }
 

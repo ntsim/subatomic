@@ -1,4 +1,4 @@
-import { SHAPE_DEFAULTS, MOVEMENT_DEFAULTS, LINK_DEFAULTS, REPULSE_DEFAULTS } from './defaults';
+import * as DEFAULTS from './defaults';
 import { deepMerge } from './util';
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import MovementSetting = SubatomicConfig.MovementSetting;
@@ -62,7 +62,7 @@ function handleShape(shape: ShapeSetting): ShapeSetting {
         checkOscillatingAnimationSetting(shape.sizeAnimation, 'shape.sizeAnimation');
     }
 
-    return deepMerge(SHAPE_DEFAULTS, shape);
+    return deepMerge(DEFAULTS.SHAPE_DEFAULTS, shape);
 }
 
 function checkOscillatingAnimationSetting(animation: OscillatingAnimationSetting, animProp: string): void {
@@ -76,11 +76,11 @@ function checkOscillatingAnimationSetting(animation: OscillatingAnimationSetting
 }
 
 function handleMovement(movement: MovementSetting): MovementSetting {
-    return deepMerge(MOVEMENT_DEFAULTS, movement || {});
+    return deepMerge(DEFAULTS.MOVEMENT_DEFAULTS, movement || {});
 }
 
 function handleLink(link: LinkSetting): LinkSetting {
-    return deepMerge(LINK_DEFAULTS, link || {});
+    return deepMerge(DEFAULTS.LINK_DEFAULTS, link || {});
 }
 
 function handleOnHover(onHover: HoverInteractionSetting): HoverInteractionSetting {
@@ -89,7 +89,11 @@ function handleOnHover(onHover: HoverInteractionSetting): HoverInteractionSettin
     }
 
     if (onHover.repulse !== undefined) {
-        onHover.repulse = deepMerge(REPULSE_DEFAULTS, onHover.repulse);
+        onHover.repulse = deepMerge(DEFAULTS.REPULSE_DEFAULTS, onHover.repulse);
+    }
+
+    if (onHover.bubble !== undefined) {
+        onHover.bubble = deepMerge(DEFAULTS.BUBBLE_DEFAULTS, onHover.bubble);
     }
 
     return onHover;

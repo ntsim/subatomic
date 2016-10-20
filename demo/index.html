@@ -20,12 +20,12 @@
                 number: 100,
                 colour: '#ffffff',
                 size: 5,
-//                sizeAnimation: {
-//                    max: 20,
-//                    min: 2,
-//                    speed: 50,
-//                    synced: false,
-//                },
+                sizeAnimation: {
+                    max: 20,
+                    min: 2,
+                    speed: 50,
+                    synced: false,
+                },
                 opacity: 0.5,
 //                opacityAnimation: {
 //                    max: 0.5,
@@ -54,6 +54,10 @@
         onHover: {
             repulse: {
                 distance: 10
+            },
+            bubble: {
+                distance: 20,
+                size: 50,
             }
         }
     });
