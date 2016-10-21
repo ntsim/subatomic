@@ -125,6 +125,13 @@ export class Subatomic {
 
                 if (this.config.onHover.attract) {
                     const distance = this.config.onHover.attract.distance;
+
+                    // Change the position to some arbitrary so that all of the
+                    // attracted particles are released upon clicking
+                    if (this.currentFrameStart - this.interactionListener.clickTime < 1000) {
+                        this.interactionListener.hoverPosition.changeCoordinate(-1 , -1);
+                    }
+
                     this.manipulator.attractParticle(particle, hoverPos, distance);
                 }
 
