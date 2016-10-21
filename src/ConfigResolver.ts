@@ -104,5 +104,9 @@ function handleOnHover(onHover: HoverInteractionSetting): HoverInteractionSettin
         onHover.attract = deepMerge(DEFAULTS.ATTRACT_DEFAULTS, onHover.attract);
     }
 
+    if (onHover.link !== undefined) {
+        onHover.link = deepMerge(DEFAULTS.LINK_DEFAULTS, onHover.link);
+    }
+
     return onHover;
 }

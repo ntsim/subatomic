@@ -1,5 +1,6 @@
 import { Particle, Position } from './particle';
 import { Canvas } from './Canvas';
+import { RGBAColour } from "./particle/Particle";
 
 export class ParticleManipulator {
     constructor(public canvas: Canvas) {}
@@ -114,7 +115,11 @@ export class ParticleManipulator {
     linkParticle(
         particle: Particle,
         linkPosition: Position,
-        distance: number, colour: string, opacity: number): void {
+        distance: number,
+        thickness: number,
+        colour: string,
+        opacity: number
+    ): void {
         const { x, y } = particle.position;
         // Normalise the distance (it's a percentage)
         const linkDistance = distance / 100;
@@ -126,7 +131,16 @@ export class ParticleManipulator {
         const positionDistance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
 
         if (positionDistance <= linkDistance) {
-            // this.canvas.drawLine(particle.position, linkPosition, );
+            const colour = RGBAColour.fromHex(colour, opacity).toString();
+
+            this.canvas.changeFillColour(colour);
+            this.canvas.drawLine(
+                particle.position.x,
+                particle.position.y,
+                linkPosition.x,
+                linkPosition.y,
+                thickness,
+            );
         }
     }
 

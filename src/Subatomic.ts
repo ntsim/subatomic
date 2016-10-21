@@ -135,10 +135,10 @@ export class Subatomic {
                     this.manipulator.attractParticle(particle, hoverPos, distance);
                 }
 
-                // if (this.config.onHover.link) {
-                //     const distance = this.config.onHover.attract.distance;
-                //     this.manipulator.linkParticle(particle, hoverPos, distance);
-                // }
+                if (this.config.onHover.link) {
+                    const { distance, colour, thickness, opacity } = this.config.onHover.link;
+                    this.manipulator.linkParticle(particle, hoverPos, distance, thickness, colour, opacity);
+                }
             }
 
             if (particle.opacityAnimation !== undefined) {

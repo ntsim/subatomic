@@ -78,8 +78,20 @@ export class Canvas {
         return this.draw(() => this.context.rect(this.normalizeX(x), this.normalizeY(y), width, height));
     }
 
-    drawLine() {
-
+    /**
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @param thickness
+     * @returns {Canvas}
+     */
+    drawLine(x1: number, y1: number, x2: number, y2: number, thickness: number): this {
+        return this.draw(() => {
+            this.context.lineWidth = thickness;
+            this.context.moveTo(x1, y2);
+            this.context.lineTo(x2, y2);
+        });
     }
 
     /**
