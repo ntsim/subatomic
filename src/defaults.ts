@@ -25,7 +25,7 @@ export const LINK_DEFAULTS: LinkInteractionSetting = {
     colour: '#ffffff',
     distance: 25,
     opacity: 0.5,
-    thickness: 1,
+    thickness: 2,
 };
 
 export const REPULSE_DEFAULTS: RepulseInteractionSetting = {

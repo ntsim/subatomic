@@ -33,6 +33,11 @@ export class Canvas {
         return this;
     }
 
+    changeStrokeColour(colour: string): this {
+        this.context.strokeStyle = colour;
+        return this;
+    }
+
     /**
      * @param x coordinate
      * @param y coordinate
@@ -87,10 +92,12 @@ export class Canvas {
      * @returns {Canvas}
      */
     drawLine(x1: number, y1: number, x2: number, y2: number, thickness: number): this {
+        this.context.lineWidth = thickness;
+
         return this.draw(() => {
-            this.context.lineWidth = thickness;
-            this.context.moveTo(x1, y2);
-            this.context.lineTo(x2, y2);
+            this.context.moveTo(this.normalizeX(x1), this.normalizeY(y1));
+            this.context.lineTo(this.normalizeX(x2), this.normalizeY(y2));
+            this.context.stroke();
         });
     }
 
