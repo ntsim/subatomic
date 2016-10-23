@@ -16,16 +16,17 @@
     subatomic('subatomic-container', {
         shapes: [
             {
-                type: 'circle',
-                number: 100,
+                type: 'polygon',
+                number: 10,
                 colour: '#ffffff',
-                size: 5,
-                sizeAnimation: {
-                    max: 20,
-                    min: 2,
-                    speed: 80,
-                    synced: false,
-                },
+                size: 50,
+                sides: 6,
+//                sizeAnimation: {
+//                    max: 20,
+//                    min: 2,
+//                    speed: 5,
+//                    synced: false,
+//                },
                 opacity: 0.5,
 //                opacityAnimation: {
 //                    max: 0.5,
@@ -45,12 +46,12 @@
 //                src: 'assets/svgs/test2.svg'
 //            }
         ],
-        movement: {
-            speed: 20,
-            type: 'random',
-            direction: 'none',
-            bounce: false,
-        },
+//        movement: {
+//            speed: 1,
+//            type: 'random',
+//            direction: 'none',
+//            bounce: false,
+//        },
         onHover: {
 //            repulse: {
 //                distance: 10

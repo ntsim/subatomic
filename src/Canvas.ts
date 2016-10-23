@@ -125,6 +125,11 @@ export class Canvas {
         const canvasX = this.normalizeX(x);
         const canvasY = this.normalizeY(y);
 
+        this.context.beginPath();
+        this.context.arc(canvasX, canvasY, 3, 0, 2 * Math.PI);
+        this.context.closePath();
+        this.context.fill();
+
         let sideLength = 2 * radius * Math.sin(Math.PI / sides);
         sideLength = Math.round(sideLength);
 
@@ -134,7 +139,7 @@ export class Canvas {
         this.context.rotate(toRadians(rotationAngle));
 
         this.draw(() => {
-            this.context.translate(canvasX + sideLength, canvasY);
+            this.context.translate(canvasX, canvasY);
             this.context.moveTo(0, 0);
 
             for (let i = 1; i < sides; i++) {
