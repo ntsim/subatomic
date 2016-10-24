@@ -8,7 +8,7 @@ export class InteractionListener {
 
     private listeningOnMouse: boolean = false;
 
-    constructor(private canvas: Canvas) {}
+    constructor(private canvas: Canvas, private clickCallbacks: { (clickPos: CanvasPosition): void }[] = []) {}
 
     setMouseListeners(): void {
         if (this.listeningOnMouse) {
@@ -58,5 +58,6 @@ export class InteractionListener {
         const y = (e.offsetY || e.clientY) * window.devicePixelRatio / this.canvas.height;
 
         this.clickPosition = new CanvasPosition(x, y);
+        this.clickCallbacks.forEach(callback => callback(this.clickPosition));
     }
 }

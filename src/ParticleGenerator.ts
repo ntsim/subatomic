@@ -23,12 +23,12 @@ export class ParticleGenerator {
     ) {
     }
 
-    generateParticles(): Particle[] {
+    generateAllParticlesFromConfig(): Particle[] {
         let allParticles: Particle[] = [];
 
         this.config.shapes
             .forEach((shape) => {
-                const particles = this.generateForShape(shape);
+                const particles = this.generateForShapeSetting(shape, shape.number);
 
                 allParticles = allParticles.concat(particles);
             });
@@ -36,8 +36,8 @@ export class ParticleGenerator {
         return allParticles;
     }
 
-    generateForShape(shapeSetting: ShapeSetting): Particle[] {
-        const { size, opacity, colour, number, type } = shapeSetting;
+    generateForShapeSetting(shapeSetting: ShapeSetting, number: number): Particle[] {
+        const { size, opacity, colour, type } = shapeSetting;
 
         let factory: () => Particle;
 
@@ -103,6 +103,20 @@ export class ParticleGenerator {
         }
 
         return particles;
+    }
+
+    generateParticles(number: number): Particle[] {
+        let allParticles: Particle[] = [];
+        const shapes = this.config.shapes;
+
+        for (let i = 0; i < number; i++) {
+            const shapeIndex = Math.floor(Math.random() * this.config.shapes.length);
+            const particle = this.generateForShapeSetting(shapes[shapeIndex], 1);
+
+            allParticles = allParticles.concat(particle);
+        }
+
+        return allParticles;
     }
 
     private generateCircle(size: number, colour: string, opacity: number): Circle {

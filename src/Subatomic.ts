@@ -5,6 +5,7 @@ import { Particle } from './particle';
 import { ParticleGenerator } from './ParticleGenerator';
 import { ParticleManipulator } from './ParticleManipulator';
 import { InteractionListener } from './InteractionListener';
+import { CanvasPosition } from './common';
 
 import ImageSetting = SubatomicConfig.ImageSetting;
 
@@ -24,11 +25,9 @@ export class Subatomic {
     private manipulator: ParticleManipulator;
     private interactionListener: InteractionListener;
 
-    constructor(
-        id: string = 'subatomic-container',
-        config: SubatomicConfig.Root,
-        imageLoader: ImageLoader
-    ) {
+    constructor(id: string = 'subatomic-container',
+                config: SubatomicConfig.Root,
+                imageLoader: ImageLoader) {
         this.id = id;
         this.config = ConfigResolver.resolve(config);
         this.imageLoader = imageLoader;
@@ -39,7 +38,7 @@ export class Subatomic {
 
         this.generator = new ParticleGenerator(this.config, this.canvas, this.imageLoader);
         this.manipulator = new ParticleManipulator(this.canvas);
-        this.interactionListener = new InteractionListener(this.canvas);
+        this.interactionListener = new InteractionListener(this.canvas, this.getClickCallbacks());
 
         this.init();
     }
@@ -88,7 +87,7 @@ export class Subatomic {
     }
 
     private prepareForRender(): void {
-        this.particles = this.generator.generateParticles();
+        this.particles = this.generator.generateAllParticlesFromConfig();
 
         this.start();
     }
@@ -125,7 +124,7 @@ export class Subatomic {
                     // Change the position to some arbitrary so that all of the
                     // attracted particles are released upon clicking
                     if (this.currentFrameStart - this.interactionListener.clickTime < 1000) {
-                        this.interactionListener.hoverPosition.changeCoordinate(-1 , -1);
+                        this.interactionListener.hoverPosition.changeCoordinate(-1, -1);
                     }
 
                     this.manipulator.attractParticle(particle, hoverPos, distance);
@@ -147,6 +146,22 @@ export class Subatomic {
 
             particle.drawToCanvas(this.canvas);
         });
+    }
+
+    private getClickCallbacks(): { (clickPos: CanvasPosition): void }[] {
+        let callbacks: { (clickPos: CanvasPosition): void }[] = [];
+
+        if (this.config.onClick.create) {
+            callbacks.push((clickPos: CanvasPosition) => {
+                const particles = this.generator.generateParticles(this.config.onClick.create.number);
+
+                particles.forEach(particle => particle.position.changeCoordinate(clickPos.x, clickPos.y));
+
+                this.particles = this.particles.concat(particles);
+            });
+        }
+
+        return callbacks;
     }
 
     private checkForInteractivity(): void {

@@ -4,6 +4,7 @@ declare namespace SubatomicConfig {
         movement?: MovementSetting;
         link?: LinkInteractionSetting;
         onHover?: HoverInteractionSetting;
+        onClick?: ClickInteractionSetting;
     }
 
     export interface ShapeSetting {
@@ -78,5 +79,14 @@ declare namespace SubatomicConfig {
         bubble?: BubbleInteractionSetting;
         repulse?: RepulseInteractionSetting;
         attract?: AttractInteractionSetting;
+    }
+
+    export interface CreateInteractionSetting {
+        number: number;
+    }
+
+    export interface ClickInteractionSetting {
+        create?: CreateInteractionSetting;
+        repulse?: RepulseInteractionSetting;
     }
 }

@@ -5,6 +5,7 @@ import MovementSetting = SubatomicConfig.MovementSetting;
 import LinkSetting = SubatomicConfig.LinkInteractionSetting;
 import OscillatingAnimationSetting = SubatomicConfig.OscillatingAnimationSetting;
 import HoverInteractionSetting = SubatomicConfig.HoverInteractionSetting;
+import ClickInteractionSetting = SubatomicConfig.ClickInteractionSetting;
 
 const ALLOWED_SHAPES = [
     'circle',
@@ -31,6 +32,7 @@ export class ConfigResolver {
         return {
             link: handleLink(config.link),
             movement: handleMovement(config.movement),
+            onClick: handleOnClick(config.onClick),
             onHover: handleOnHover(config.onHover),
             shapes: handleShapes(config.shapes),
         };
@@ -115,4 +117,16 @@ function handleOnHover(onHover: HoverInteractionSetting): HoverInteractionSettin
     }
 
     return onHover;
+}
+
+function handleOnClick(onClick: ClickInteractionSetting): ClickInteractionSetting {
+    if (onClick === undefined ) {
+        return {};
+    }
+
+    if (onClick.create !== undefined) {
+        onClick.create = deepMerge(DEFAULTS.CREATE_DEFAULTS, onClick.create);
+    }
+
+    return onClick;
 }
