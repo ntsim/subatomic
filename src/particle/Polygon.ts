@@ -1,5 +1,6 @@
-import { Particle, Position, RGBAColour, Velocity } from './Particle';
+import { Particle } from './Particle';
 import { Canvas } from '../Canvas';
+import { RGBAColour, Velocity, CanvasPosition } from '../common';
 import { polygon } from '../util';
 
 export class Polygon extends Particle {
@@ -7,7 +8,7 @@ export class Polygon extends Particle {
     public sideLength: number;
 
     constructor(
-        public position: Position,
+        public position: CanvasPosition,
         public size: number,
         public colour: RGBAColour,
         public sides: number,

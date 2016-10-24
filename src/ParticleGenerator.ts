@@ -1,10 +1,5 @@
 import {
     Particle,
-    Position,
-    RGBAColour,
-    OpacityAnimation,
-    SizeAnimation,
-    Velocity,
     Star,
     Polygon,
     Triangle,
@@ -12,6 +7,7 @@ import {
     Circle,
 } from './particle';
 import { Canvas } from './Canvas';
+import { CanvasPosition, RGBAColour, OpacityAnimation, SizeAnimation, Velocity } from './common';
 
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import PolygonSetting = SubatomicConfig.PolygonSetting;
@@ -101,7 +97,7 @@ export class ParticleGenerator {
 
     private generateCircle(size: number, colour: string, opacity: number): Circle {
         return new Circle(
-            Position.randomFrom2d(this.canvas.width, this.canvas.height, size),
+            CanvasPosition.randomFrom2d(this.canvas.width, this.canvas.height, size),
             size,
             RGBAColour.fromHex(colour, opacity),
             Velocity.fromConfig(this.config.movement)
@@ -110,7 +106,7 @@ export class ParticleGenerator {
 
     private generateTriangle(size: number, colour: string, opacity: number): Triangle {
         return new Triangle(
-            Position.randomFrom2d(this.canvas.width, this.canvas.height, size),
+            CanvasPosition.randomFrom2d(this.canvas.width, this.canvas.height, size),
             size,
             RGBAColour.fromHex(colour, opacity),
             Velocity.fromConfig(this.config.movement)
@@ -119,7 +115,7 @@ export class ParticleGenerator {
 
     private generateSquare(size: number, colour: string, opacity: number): Square {
         return new Square(
-            Position.randomFrom2d(this.canvas.width, this.canvas.height, size),
+            CanvasPosition.randomFrom2d(this.canvas.width, this.canvas.height, size),
             size,
             RGBAColour.fromHex(colour, opacity),
             Velocity.fromConfig(this.config.movement)
@@ -130,7 +126,7 @@ export class ParticleGenerator {
         const polygon = <PolygonSetting> shape;
 
         return new Polygon(
-            Position.randomFrom2d(this.canvas.width, this.canvas.height, shape.size),
+            CanvasPosition.randomFrom2d(this.canvas.width, this.canvas.height, shape.size),
             shape.size,
             RGBAColour.fromHex(shape.colour, shape.opacity),
             polygon.sides,
@@ -140,7 +136,7 @@ export class ParticleGenerator {
 
     private generateStar(size: number, colour: string, opacity: number): Star {
         return new Star(
-            Position.randomFrom2d(this.canvas.width, this.canvas.height, size),
+            CanvasPosition.randomFrom2d(this.canvas.width, this.canvas.height, size),
             size,
             RGBAColour.fromHex(colour, opacity),
             Velocity.fromConfig(this.config.movement)

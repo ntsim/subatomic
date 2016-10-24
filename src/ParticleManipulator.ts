@@ -1,5 +1,6 @@
-import { Particle, Position, RGBAColour } from './particle';
+import { Particle } from './particle';
 import { Canvas } from './Canvas';
+import { CanvasPosition, RGBAColour } from './common';
 
 export class ParticleManipulator {
     constructor(public canvas: Canvas) {}
@@ -55,7 +56,7 @@ export class ParticleManipulator {
         particle.position.changeCoordinate(nextX, nextY);
     }
 
-    repulseParticle(particle: Particle, hoverPosition: Position, distance: number): void {
+    repulseParticle(particle: Particle, hoverPosition: CanvasPosition, distance: number): void {
         const { x, y } = particle.position;
         // Normalise the distance (it's a percentage)
         const repulseDistance = distance / 100;
@@ -77,7 +78,7 @@ export class ParticleManipulator {
         }
     }
 
-    bubbleParticle(particle: Particle, hoverPosition: Position, distance: number, size: number): void {
+    bubbleParticle(particle: Particle, hoverPosition: CanvasPosition, distance: number, size: number): void {
         const { x, y } = particle.position;
         // Normalise the distance (it's a percentage)
         const bubbleDistance = distance / 100;
@@ -93,7 +94,7 @@ export class ParticleManipulator {
         }
     }
 
-    attractParticle(particle: Particle, hoverPosition: Position, distance: number): void {
+    attractParticle(particle: Particle, hoverPosition: CanvasPosition, distance: number): void {
         const { x, y } = particle.position;
         // Normalise the distance (it's a percentage)
         const bubbleDistance = distance / 100;
@@ -113,7 +114,7 @@ export class ParticleManipulator {
 
     linkParticle(
         particle: Particle,
-        linkPosition: Position,
+        linkPosition: CanvasPosition,
         distance: number,
         thickness: number,
         colourHex: string,

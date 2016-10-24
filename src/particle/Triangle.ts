@@ -1,12 +1,13 @@
-import { Particle, RGBAColour, Velocity, Position } from './Particle';
+import { Particle } from './Particle';
 import { Canvas } from '../Canvas';
+import { CanvasPosition, RGBAColour, Velocity } from '../common';
 import { polygon } from '../util';
 
 export class Triangle extends Particle {
 
     public sideLength: number;
 
-    constructor(public position: Position,
+    constructor(public position: CanvasPosition,
                 public size: number,
                 public colour: RGBAColour,
                 public velocity: Velocity,

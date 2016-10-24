@@ -1,12 +1,13 @@
-import { Particle, RGBAColour, Velocity, Position } from './Particle';
+import { Particle } from './Particle';
 import { Canvas } from '../Canvas';
+import { RGBAColour, Velocity, CanvasPosition } from '../common';
 import { polygon } from '../util';
 
 export class Star extends Particle {
 
     public sideLength: number;
 
-    constructor(position: Position, size: number, colour: RGBAColour, velocity: Velocity) {
+    constructor(position: CanvasPosition, size: number, colour: RGBAColour, velocity: Velocity) {
         super(position, size, colour, velocity);
 
         this.sideLength = polygon.calculateSideLength(this.size, 5);

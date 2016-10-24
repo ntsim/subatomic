@@ -1,10 +1,10 @@
-import { Position } from './particle';
+import { CanvasPosition } from './common';
 import { Canvas } from './Canvas';
 
 export class InteractionListener {
     clickTime: number;
-    hoverPosition: Position;
-    clickPosition: Position;
+    hoverPosition: CanvasPosition;
+    clickPosition: CanvasPosition;
 
     private listeningOnMouse: boolean = false;
 
@@ -41,7 +41,7 @@ export class InteractionListener {
         const y = (e.offsetY || e.clientY) * window.devicePixelRatio / this.canvas.height;
 
         if (!this.hoverPosition) {
-            this.hoverPosition = new Position(x, y);
+            this.hoverPosition = new CanvasPosition(x, y);
         } else {
             this.hoverPosition.changeCoordinate(x, y);
         }
@@ -57,6 +57,6 @@ export class InteractionListener {
         const x = (e.offsetX || e.clientX) * window.devicePixelRatio / this.canvas.width;
         const y = (e.offsetY || e.clientY) * window.devicePixelRatio / this.canvas.height;
 
-        this.clickPosition = new Position(x, y);
+        this.clickPosition = new CanvasPosition(x, y);
     }
 }
