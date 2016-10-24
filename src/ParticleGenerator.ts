@@ -9,7 +9,7 @@ import {
 } from './particle';
 import { Canvas } from './Canvas';
 import { CanvasPosition, RGBAColour, OpacityAnimation, SizeAnimation, Velocity } from './common';
-import { ImageLoader } from './image';
+import { ImageLoader } from './ImageLoader';
 
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import PolygonSetting = SubatomicConfig.PolygonSetting;

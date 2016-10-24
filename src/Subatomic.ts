@@ -1,6 +1,6 @@
 import { Canvas } from './Canvas';
 import { ConfigResolver } from './ConfigResolver';
-import { ImageLoader } from './image/ImageLoader';
+import { ImageLoader } from './ImageLoader';
 import { Particle } from './particle';
 import { ParticleGenerator } from './ParticleGenerator';
 import { ParticleManipulator } from './ParticleManipulator';

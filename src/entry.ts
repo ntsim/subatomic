@@ -3,7 +3,7 @@ import * as assign from 'object.assign';
 
 import { Subatomic } from './Subatomic';
 import { SubatomicDOM } from './SubatomicDOM';
-import { ImageLoader } from './image/ImageLoader';
+import { ImageLoader } from './ImageLoader';
 
 raf.polyfill();
 assign.getPolyfill();

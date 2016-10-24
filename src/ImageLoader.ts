@@ -1,4 +1,4 @@
-import { RGBAColour } from '../common';
+import { RGBAColour } from './common';
 
 export class ImageLoader {
     private requests: { [src: string]: XMLHttpRequest } = {};
