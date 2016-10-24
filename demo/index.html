@@ -5,42 +5,62 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Subatomic.js Demo</title>
+
+    <style>
+        body, div {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            margin: 0;
+        }
+
+        canvas {
+            display: block;
+            vertical-align: bottom;
+        }
+
+        #subatomic-container {
+            background: #a0aec3;
+            background-size: cover;
+            background-position: 50% 50%;
+        }
+    </style>
 </head>
 <body>
 
-<div id="subatomic-container" style="background: #a0aec3;"></div>
+<div id="subatomic-container"></div>
 
 <script src="assets/subatomic.js"></script>
 
 <script>
     subatomic('subatomic-container', {
         shapes: [
-//            {
-//                type: 'triangle',
-//                number: 10,
-//                colour: '#ffffff',
-//                size: 50,
-//                sides: 3,
+            {
+                type: 'circle',
+                number: 100,
+                colour: '#ffffff',
+                sides: 2,
+                size: 5,
 //                sizeAnimation: {
-//                    max: 20,
+//                    max: 5,
 //                    min: 2,
 //                    speed: 5,
 //                    synced: false,
 //                },
-//                opacity: 0.5,
-//                opacityAnimation: {
-//                    max: 1,
-//                    min: 0.1,
-//                    speed: 5,
-//                    synced: false,
-//                }
-//            },
-            {
-                type: 'image',
-                number: 10,
-                src: 'assets/svgs/test1.svg',
-                size: 50,
+                opacity: 0.5,
+                opacityAnimation: {
+                    max: 1,
+                    min: 0.1,
+                    speed: 20,
+                    synced: false,
+                }
             },
+//            {
+//                type: 'image',
+//                number: 10,
+//                src: 'assets/svgs/test1.svg',
+//                size: 50,
+//            },
 //            {
 //                type: 'image',
 //                number: 10,
