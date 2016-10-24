@@ -1,21 +1,18 @@
-import { Particle } from './Particle';
+import { Polygon } from './Polygon';
 import { Canvas } from '../Canvas';
 import { CanvasPosition, RGBAColour, Velocity } from '../common';
-import { polygon } from '../util';
 
-export class Triangle extends Particle {
+export class Triangle extends Polygon {
 
     public sideLength: number;
 
-    constructor(public position: CanvasPosition,
-                public size: number,
-                public colour: RGBAColour,
-                public velocity: Velocity,
+    constructor(
+        public position: CanvasPosition,
+        public size: number,
+        public colour: RGBAColour,
+        public velocity: Velocity,
     ) {
-        super(position, size, colour, velocity);
-
-        this.sideLength  = polygon.calculateSideLength(this.size, 3);
-
+        super(position, size, colour, velocity, 3);
     }
 
     drawToCanvas(canvas: Canvas): void {

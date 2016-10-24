@@ -129,8 +129,8 @@ export class ParticleGenerator {
             CanvasPosition.randomFrom2d(this.canvas.width, this.canvas.height, shape.size),
             shape.size,
             RGBAColour.fromHex(shape.colour, shape.opacity),
+            Velocity.fromConfig(this.config.movement),
             polygon.sides,
-            Velocity.fromConfig(this.config.movement)
         );
     }
 

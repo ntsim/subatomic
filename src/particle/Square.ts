@@ -1,7 +1,16 @@
-import { Particle } from './Particle';
+import { Polygon } from './Polygon';
 import { Canvas } from '../Canvas';
+import { CanvasPosition, RGBAColour, Velocity } from '../common';
 
-export class Square extends Particle {
+export class Square extends Polygon {
+    constructor(
+        public position: CanvasPosition,
+        public size: number,
+        public colour: RGBAColour,
+        public velocity: Velocity
+    ) {
+        super(position, size, colour, velocity, 4);
+    }
 
     drawToCanvas(canvas: Canvas): void {
         canvas
@@ -9,8 +18,8 @@ export class Square extends Particle {
             .drawRectangle(
                 this.position.x,
                 this.position.y,
-                this.size,
-                this.size
+                this.sideLength,
+                this.sideLength
             );
     }
 }
