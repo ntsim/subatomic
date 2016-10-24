@@ -12,7 +12,7 @@ export class Triangle extends Polygon {
         public colour: RGBAColour,
         public velocity: Velocity,
     ) {
-        super(position, size, colour, velocity, 3);
+        super(position, size, colour, 3, velocity);
     }
 
     drawToCanvas(canvas: Canvas): void {

@@ -11,21 +11,20 @@ export class Polygon extends Particle {
     }
 
     public sideLength: number;
+    private _size: number;
 
     constructor(
         public position: CanvasPosition,
-        public size: number,
+        size: number,
         public colour: RGBAColour,
-        public velocity: Velocity,
-        public sides: number
+        public sides: number,
+        public velocity?: Velocity
     ) {
         super(position, size, colour, velocity);
 
         if (this.sides < 3) {
             throw new Error('Cannot draw a shape with less than 3 sides.');
         }
-
-        this.sideLength = Polygon.calculateSideLength(this.size, this.sides);
     }
 
     drawToCanvas(canvas: Canvas): void {
@@ -38,5 +37,14 @@ export class Polygon extends Particle {
                 this.sideLength,
                 this.sides,
             );
+    }
+
+    set size(size: number) {
+        this._size = size;
+        this.sideLength = Polygon.calculateSideLength(this.size, this.sides);
+    }
+
+    get size(): number {
+        return this._size;
     }
 }

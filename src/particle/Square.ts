@@ -9,7 +9,7 @@ export class Square extends Polygon {
         public colour: RGBAColour,
         public velocity: Velocity
     ) {
-        super(position, size, colour, velocity, 4);
+        super(position, size, colour, 4, velocity);
     }
 
     drawToCanvas(canvas: Canvas): void {

@@ -78,7 +78,7 @@ export class ParticleManipulator {
         }
     }
 
-    bubbleParticle(particle: Particle, hoverPosition: CanvasPosition, distance: number, size: number): void {
+    bubbleParticle(particle: Particle, hoverPosition: CanvasPosition, distance: number, bubbleSize: number): void {
         const { x, y } = particle.position;
         // Normalise the distance (it's a percentage)
         const bubbleDistance = distance / 100;
@@ -90,7 +90,7 @@ export class ParticleManipulator {
         const positionDistance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
 
         if (positionDistance <= bubbleDistance) {
-            particle.size = size;
+            particle.size = bubbleSize;
         }
     }
 

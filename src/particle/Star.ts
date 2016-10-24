@@ -7,7 +7,7 @@ export class Star extends Polygon {
     public sideLength: number;
 
     constructor(position: CanvasPosition, size: number, colour: RGBAColour, velocity: Velocity) {
-        super(position, size, colour, velocity, 5);
+        super(position, size, colour, 5, velocity);
     }
 
     drawToCanvas(canvas: Canvas): void {
