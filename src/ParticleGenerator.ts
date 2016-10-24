@@ -5,15 +5,22 @@ import {
     Triangle,
     Square,
     Circle,
+    ImageParticle,
 } from './particle';
 import { Canvas } from './Canvas';
 import { CanvasPosition, RGBAColour, OpacityAnimation, SizeAnimation, Velocity } from './common';
+import { ImageLoader } from './image';
 
 import ShapeSetting = SubatomicConfig.ShapeSetting;
 import PolygonSetting = SubatomicConfig.PolygonSetting;
+import ImageSetting = SubatomicConfig.ImageSetting;
 
 export class ParticleGenerator {
-    constructor(public config: SubatomicConfig.Root, public canvas: Canvas) {
+    constructor(
+        private config: SubatomicConfig.Root,
+        private canvas: Canvas,
+        private imageLoader: ImageLoader
+    ) {
     }
 
     generateParticles(): Particle[] {
@@ -49,6 +56,9 @@ export class ParticleGenerator {
                 break;
             case 'star':
                 factory = () => this.generateStar(size, colour, opacity);
+                break;
+            case 'image':
+                factory = () => this.generateImage(shapeSetting);
                 break;
             default:
                 throw new Error(`Invalid shape.type \`${type}\` was given.`);
@@ -139,6 +149,28 @@ export class ParticleGenerator {
             CanvasPosition.randomFrom2d(this.canvas.width, this.canvas.height, size),
             size,
             RGBAColour.fromHex(colour, opacity),
+            Velocity.fromConfig(this.config.movement)
+        );
+    }
+
+    private generateImage(shape: ShapeSetting): ImageParticle {
+        const imageSetting = <ImageSetting> shape;
+        const { src, size, opacity } = imageSetting;
+
+        const colour = RGBAColour.fromHex(imageSetting.colour, opacity);
+        let image: HTMLImageElement;
+
+        if (imageSetting.src.indexOf('.svg') > -1) {
+            image = this.imageLoader.renderSvg(src, colour);
+        } else {
+            image = this.imageLoader.getImage(src);
+        }
+
+        return new ImageParticle(
+            CanvasPosition.randomFrom2d(this.canvas.width, this.canvas.height, size),
+            size,
+            colour,
+            image,
             Velocity.fromConfig(this.config.movement)
         );
     }

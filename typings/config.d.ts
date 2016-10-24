@@ -24,8 +24,6 @@ declare namespace SubatomicConfig {
 
     export interface ImageSetting extends ShapeSetting {
         src: string;
-        ratioX: number;
-        ratioY: number;
     }
 
     export interface PolygonSetting extends ShapeSetting {

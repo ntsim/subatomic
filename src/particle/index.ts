@@ -1,5 +1,5 @@
 import { Circle } from './Circle';
-import { Image } from './Image';
+import { ImageParticle } from './ImageParticle';
 import { Particle } from './Particle';
 import { Polygon } from './Polygon';
 import { Square } from './Square';
@@ -8,7 +8,7 @@ import { Triangle } from './Triangle';
 
 export {
     Circle,
-    Image,
+    ImageParticle,
     Particle,
     Polygon,
     Square,

@@ -38,6 +38,21 @@ export class Canvas {
         return this;
     }
 
+    changeAlpha(alpha: number): this {
+        this.context.globalAlpha = alpha;
+        return this;
+    }
+
+    saveContext(): this {
+        this.context.save();
+        return this;
+    }
+
+    restoreContext(): this {
+        this.context.restore();
+        return this;
+    }
+
     /**
      * @param x coordinate
      * @param y coordinate
@@ -144,6 +159,16 @@ export class Canvas {
         this.context.restore();
 
         return this;
+    }
+
+    drawImage(x: number, y: number, image: HTMLImageElement, width?: number, height?: number) {
+        return this.draw(() => this.context.drawImage(
+            image,
+            this.normalizeX(x) - (0.5 * (width || image.width)),
+            this.normalizeY(y) - (0.5 * (height || image.height)),
+            width || image.width,
+            height || image.height
+        ));
     }
 
     get element(): HTMLCanvasElement {

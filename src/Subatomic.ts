@@ -37,7 +37,7 @@ export class Subatomic {
         this.rootEl = document.getElementById(id);
         this.canvas = new Canvas(this.rootEl, '100%', '100%', 'subatomic-canvas');
 
-        this.generator = new ParticleGenerator(this.config, this.canvas);
+        this.generator = new ParticleGenerator(this.config, this.canvas, this.imageLoader);
         this.manipulator = new ParticleManipulator(this.canvas);
         this.interactionListener = new InteractionListener(this.canvas);
 

@@ -1,9 +1,9 @@
-import Svg from './Svg';
+import { RGBAColour } from '../common';
 
 export class ImageLoader {
-    requests: { [src: string]: XMLHttpRequest } = {};
-    svgs: { [src: string]: Svg } = {};
-    renderedImages: { [src: string]: HTMLElement } = {};
+    private requests: { [src: string]: XMLHttpRequest } = {};
+    private svgs: { [src: string]: string } = {};
+    private renderedImages: { [src: string]: HTMLImageElement } = {};
 
     private ready: boolean = false;
     private requestCount: number = 0;
@@ -31,7 +31,7 @@ export class ImageLoader {
         this.ready = false;
         this.requestCount++;
 
-        if (src.indexOf('svg') > -1) {
+        if (src.indexOf('.svg') > -1) {
             this.loadSvg(src, callback);
         } else {
             this.renderImage(src, callback);
@@ -46,6 +46,48 @@ export class ImageLoader {
         return Object.keys(this.renderedImages).length;
     }
 
+    getSvg(src: string): string {
+        if (this.svgs[src] === undefined) {
+             throw new Error(`SVG with src '${src}' has not been loaded yet.`);
+        }
+
+        return this.svgs[src];
+    }
+
+    getImage(src: string): HTMLImageElement {
+        if (this.renderedImages[src] === undefined) {
+            throw new Error(`Image with src '${src}' has not been rendered yet.`);
+        }
+
+        return this.renderedImages[src];
+    }
+
+    renderSvg(src: string, colour: RGBAColour): HTMLImageElement {
+        if (this.renderedImages[src] !== undefined) {
+            return this.renderedImages[src];
+        }
+
+        this.requestCount++;
+
+        const colouredXml = this.getSvg(src)
+            .replace(/#([0-9A-F]{3,6})/gi, (m, r, g, b) => colour.toString());
+
+        const blob = new Blob([colouredXml], { type: 'image/svg+xml;charset=utf-8' });
+        const URL = window.URL;
+        const svgUrl = URL.createObjectURL(blob);
+
+        // Rendering of the SVG image is blocking to make our lives easier
+        // TODO: Make this async if possible.
+        const image = new Image();
+        image.src = svgUrl;
+        image.addEventListener('load', () => URL.revokeObjectURL(svgUrl));
+
+        this.requestsDone++;
+        this.renderedImages[src] = image;
+
+        return image;
+    }
+
     private loadSvg(src: string, callback?: () => void): void {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', src);
@@ -58,7 +100,6 @@ export class ImageLoader {
 
     private renderImage(src: string, callback?: () => void): void {
         const image = new Image();
-        image.src = src;
         image.addEventListener('load', () => {
             this.requestsDone++;
             this.renderedImages[src] = image;
@@ -67,6 +108,7 @@ export class ImageLoader {
                 callback();
             }
         });
+        image.src = src;
     }
 
     private onXhrComplete(src: string, callback?: () => void): void {
@@ -82,7 +124,7 @@ export class ImageLoader {
             throw new Error(`Error loading image from src: ${src}`);
         }
 
-        this.svgs[src] = new Svg(xhr.responseText);
+        this.svgs[src] = xhr.responseText;
 
         if (typeof callback === 'function') {
             callback();
