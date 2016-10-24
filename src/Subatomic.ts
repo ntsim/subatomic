@@ -91,10 +91,6 @@ export class Subatomic {
         this.particles = this.generator.generateParticles();
 
         this.start();
-
-        if (!this.config.movement.enabled) {
-            this.halt();
-        }
     }
 
     private renderFrame(): void {

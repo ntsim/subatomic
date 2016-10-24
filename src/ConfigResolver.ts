@@ -76,7 +76,13 @@ function checkOscillatingAnimationSetting(animation: OscillatingAnimationSetting
 }
 
 function handleMovement(movement: MovementSetting): MovementSetting {
-    return deepMerge(DEFAULTS.MOVEMENT_DEFAULTS, movement || {});
+    if (movement === undefined) {
+        return {
+            enabled: false,
+        };
+    }
+
+    return deepMerge(DEFAULTS.MOVEMENT_DEFAULTS, movement);
 }
 
 function handleLink(link: LinkSetting): LinkSetting {

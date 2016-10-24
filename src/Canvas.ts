@@ -80,14 +80,18 @@ export class Canvas {
         width: number,
         height: number,
     ): this {
-        return this.draw(() => this.context.rect(this.normalizeX(x), this.normalizeY(y), width, height));
+        return this.draw(() => {
+            const startX = this.normalizeX(x) - (width / 2);
+            const startY = this.normalizeY(y) - (width / 2);
+            this.context.rect(startX, startY, width, height);
+        });
     }
 
     /**
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
+     * @param x1 coordinate
+     * @param y1 coordinate
+     * @param x2 coordinate
+     * @param y2 coordinate
      * @param thickness
      * @returns {Canvas}
      */
@@ -105,6 +109,7 @@ export class Canvas {
      * @param x coordinate
      * @param y coordinate
      * @param radius
+     * @param sideLength
      * @param sides
      * @param rotationAngle (degrees)
      * @param vertexAngle (degrees) for advanced manipulation (e.g. for generating stars)
@@ -114,38 +119,25 @@ export class Canvas {
         x: number,
         y: number,
         radius: number,
+        sideLength: number,
         sides: number,
         rotationAngle: number = 0,
-        vertexAngle: number = -360 / sides,
+        vertexAngle: number = 360 / sides,
     ) {
-        if (sides < 3) {
-            throw new Error('Cannot draw a shape with less than 3 sides.');
-        }
-
         const canvasX = this.normalizeX(x);
         const canvasY = this.normalizeY(y);
 
-        this.context.beginPath();
-        this.context.arc(canvasX, canvasY, 3, 0, 2 * Math.PI);
-        this.context.closePath();
-        this.context.fill();
-
-        let sideLength = 2 * radius * Math.sin(Math.PI / sides);
-        sideLength = Math.round(sideLength);
-
-        const vertexRotation = toRadians(vertexAngle);
-
         this.context.save();
-        this.context.rotate(toRadians(rotationAngle));
 
         this.draw(() => {
-            this.context.translate(canvasX, canvasY);
+            this.context.translate(canvasX, canvasY - radius);
+            this.context.rotate(toRadians(vertexAngle / 2));
             this.context.moveTo(0, 0);
 
             for (let i = 1; i < sides; i++) {
                 this.context.lineTo(sideLength, 0);
                 this.context.translate(sideLength, 0);
-                this.context.rotate(vertexRotation);
+                this.context.rotate(toRadians(vertexAngle));
             }
         });
 
