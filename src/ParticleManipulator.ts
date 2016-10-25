@@ -90,7 +90,9 @@ export class ParticleManipulator {
         const positionDistance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
 
         if (positionDistance <= bubbleDistance) {
-            particle.size = bubbleSize;
+            const ratio = 1 - (positionDistance / bubbleDistance);
+
+            particle.size = bubbleSize * ratio;
         }
     }
 
