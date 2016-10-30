@@ -1,8 +1,6 @@
 import * as DEFAULTS from './defaults';
 import { deepMerge } from './util';
 import ShapeSetting = SubatomicConfig.ShapeSetting;
-import MovementSetting = SubatomicConfig.MovementSetting;
-import LinkSetting = SubatomicConfig.LinkInteractionSetting;
 import OscillatingAnimationSetting = SubatomicConfig.OscillatingAnimationSetting;
 import HoverInteractionSetting = SubatomicConfig.HoverInteractionSetting;
 import ClickInteractionSetting = SubatomicConfig.ClickInteractionSetting;
