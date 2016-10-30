@@ -35,11 +35,11 @@ export class ConfigResolver {
             shapes: handleShapes(config.shapes),
         };
 
-        if (config.movement !== undefined) {
+        if (isObject(config.movement)) {
             resolvedConfig.movement = deepMerge(DEFAULTS.MOVEMENT_DEFAULTS, config.movement);
         }
 
-        if (config.link !== undefined) {
+        if (isObject(config.link)) {
             resolvedConfig.link = deepMerge(DEFAULTS.LINK_DEFAULTS, config.link);
         }
 
@@ -64,11 +64,11 @@ function handleShape(shape: ShapeSetting): ShapeSetting {
         throw new Error('Config must provide a shape.opacity.value greater than 0 and less than 1.');
     }
 
-    if (shape.opacityAnimation !== undefined) {
+    if (isObject(shape.opacityAnimation)) {
         checkOscillatingAnimationSetting(shape.opacityAnimation, 'shape.opacityAnimation');
     }
 
-    if (shape.sizeAnimation !== undefined) {
+    if (isObject(shape.sizeAnimation)) {
         checkOscillatingAnimationSetting(shape.sizeAnimation, 'shape.sizeAnimation');
     }
 
@@ -94,19 +94,19 @@ function handleOnHover(onHover: HoverInteractionSetting): HoverInteractionSettin
         throw new Error('Config should not set both onHover.repulse and onHover.attract.');
     }
 
-    if (onHover.repulse !== undefined) {
+    if (isObject(onHover.repulse)) {
         onHover.repulse = deepMerge(DEFAULTS.REPULSE_DEFAULTS, onHover.repulse);
     }
 
-    if (onHover.bubble !== undefined) {
+    if (isObject(onHover.bubble)) {
         onHover.bubble = deepMerge(DEFAULTS.BUBBLE_DEFAULTS, onHover.bubble);
     }
 
-    if (onHover.attract !== undefined) {
+    if (isObject(onHover.attract)) {
         onHover.attract = deepMerge(DEFAULTS.ATTRACT_DEFAULTS, onHover.attract);
     }
 
-    if (onHover.link !== undefined) {
+    if (isObject(onHover.link)) {
         onHover.link = deepMerge(DEFAULTS.LINK_DEFAULTS, onHover.link);
     }
 
@@ -114,13 +114,17 @@ function handleOnHover(onHover: HoverInteractionSetting): HoverInteractionSettin
 }
 
 function handleOnClick(onClick: ClickInteractionSetting): ClickInteractionSetting {
-    if (onClick === undefined ) {
+    if (onClick === undefined) {
         return {};
     }
 
-    if (onClick.create !== undefined) {
+    if (isObject(onClick.create)) {
         onClick.create = deepMerge(DEFAULTS.CREATE_DEFAULTS, onClick.create);
     }
 
     return onClick;
+}
+
+function isObject(value: any): boolean {
+    return typeof value === 'object' && value !== null;
 }
