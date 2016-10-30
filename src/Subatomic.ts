@@ -5,7 +5,6 @@ import { Particle } from './particle';
 import { ParticleGenerator } from './ParticleGenerator';
 import { ParticleManipulator } from './ParticleManipulator';
 import { InteractionListener } from './InteractionListener';
-import { CanvasPosition } from './common';
 
 import ImageSetting = SubatomicConfig.ImageSetting;
 
@@ -38,7 +37,7 @@ export class Subatomic {
 
         this.generator = new ParticleGenerator(this.config, this.canvas, this.imageLoader);
         this.manipulator = new ParticleManipulator(this.canvas);
-        this.interactionListener = new InteractionListener(this.canvas, this.getClickCallbacks());
+        this.interactionListener = new InteractionListener(this.canvas);
 
         this.init();
     }
@@ -136,6 +135,14 @@ export class Subatomic {
                 }
             }
 
+            if (this.interactionListener.clickPosition) {
+                const clickPos = this.interactionListener.clickPosition;
+
+                if (this.config.onClick.repulse) {
+                   this.manipulator.clickRepulseParticle(particle, clickPos, this.config.onClick.repulse.distance);
+                }
+            }
+
             if (particle.opacityAnimation !== undefined) {
                 this.manipulator.animateParticleOpacity(particle, deltaTime);
             }
@@ -158,24 +165,22 @@ export class Subatomic {
                 });
             }
 
+            particle.checkMoveToPosition();
             particle.drawToCanvas(this.canvas);
         });
-    }
 
-    private getClickCallbacks(): { (clickPos: CanvasPosition): void }[] {
-        let callbacks: { (clickPos: CanvasPosition): void }[] = [];
-
-        if (this.config.onClick.create) {
-            callbacks.push((clickPos: CanvasPosition) => {
+        if (this.interactionListener.clickPosition) {
+            if (this.config.onClick.create) {
                 const particles = this.generator.generateParticles(this.config.onClick.create.number);
+                const clickPos = this.interactionListener.clickPosition;
 
                 particles.forEach(particle => particle.position.changeCoordinate(clickPos.x, clickPos.y));
 
                 this.particles = this.particles.concat(particles);
-            });
-        }
+            }
 
-        return callbacks;
+            this.interactionListener.clickPosition = null;
+        }
     }
 
     private checkForInteractivity(): void {

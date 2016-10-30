@@ -56,13 +56,13 @@ export class ParticleManipulator {
         particle.position.changeCoordinate(nextX, nextY);
     }
 
-    repulseParticle(particle: Particle, hoverPosition: CanvasPosition, distance: number): void {
+    repulseParticle(particle: Particle, repulsePosition: CanvasPosition, distance: number): void {
         const { x, y } = particle.position;
         // Normalise the distance (it's a percentage)
         const repulseDistance = distance / 100;
 
-        const diffX = x - hoverPosition.x;
-        const diffY = y - hoverPosition.y;
+        const diffX = x - repulsePosition.x;
+        const diffY = y - repulsePosition.y;
 
         // Use Pythagoras theorem to get the distance
         const positionDistance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
@@ -73,16 +73,34 @@ export class ParticleManipulator {
             const scale = repulseDistance / positionDistance;
 
             // Scale up the x and y distances and add them to the repulsion position
-            particle.position.x = hoverPosition.x + (diffX * scale);
-            particle.position.y = hoverPosition.y + (diffY * scale);
+            particle.position.x = repulsePosition.x + (diffX * scale);
+            particle.position.y = repulsePosition.y + (diffY * scale);
         }
     }
 
-    bubbleParticle(particle: Particle, hoverPosition: CanvasPosition, distance: number, bubbleSize: number): void {
+    clickRepulseParticle(particle: Particle, repulsePosition: CanvasPosition, distance: number): void {
+        const repulseDistance = distance / 100;
+
+        const diffX = particle.position.x - repulsePosition.x;
+        const diffY = particle.position.y - repulsePosition.y;
+        const positionDistance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+
+        if (positionDistance < repulseDistance) {
+            const scale = repulseDistance / positionDistance;
+            // Final positions at the end of the repulsion animation
+            const finalX = repulsePosition.x + (diffX * scale);
+            const finalY = repulsePosition.y + (diffY * scale);
+            const finalPos = new CanvasPosition(finalX, finalY);
+
+            particle.moveToPosition(finalPos, 300, (p: Particle) => p.resetVelocity());
+        }
+    }
+
+    bubbleParticle(particle: Particle, bubblePosition: CanvasPosition, distance: number, bubbleSize: number): void {
         // Normalise the distance (it's a percentage)
         const bubbleDistance = distance / 100;
 
-        const positionDistance = particle.position.distanceTo(hoverPosition);
+        const positionDistance = particle.position.distanceTo(bubblePosition);
 
         if (positionDistance <= bubbleDistance) {
             const ratio = 1 - (positionDistance / bubbleDistance);
@@ -91,21 +109,21 @@ export class ParticleManipulator {
         }
     }
 
-    attractParticle(particle: Particle, hoverPosition: CanvasPosition, distance: number): void {
+    attractParticle(particle: Particle, attractPosition: CanvasPosition, distance: number): void {
         const { x, y } = particle.position;
         // Normalise the distance (it's a percentage)
         const bubbleDistance = distance / 100;
 
-        const diffX = x - hoverPosition.x;
-        const diffY = y - hoverPosition.y;
+        const diffX = x - attractPosition.x;
+        const diffY = y - attractPosition.y;
 
         // Use Pythagoras theorem to get the distance
         const positionDistance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
 
         if (positionDistance <= bubbleDistance) {
             // Allow the attracted particles to jiggle a bit
-            particle.position.x = hoverPosition.x + (diffX * Math.random() / 2);
-            particle.position.y = hoverPosition.y + (diffY * Math.random() / 2);
+            particle.position.x = attractPosition.x + (diffX * Math.random() / 2);
+            particle.position.y = attractPosition.y + (diffY * Math.random() / 2);
         }
     }
 
