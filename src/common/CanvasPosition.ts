@@ -40,4 +40,12 @@ export class CanvasPosition {
         this.x = x;
         this.y = y;
     }
+
+    distanceTo(otherPosition: CanvasPosition): number {
+        const diffX = this.x - otherPosition.x ;
+        const diffY = this.y - otherPosition.y;
+
+        // Use Pythagoras theorem to get the distance
+        return Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+    }
 }

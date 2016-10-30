@@ -79,15 +79,10 @@ export class ParticleManipulator {
     }
 
     bubbleParticle(particle: Particle, hoverPosition: CanvasPosition, distance: number, bubbleSize: number): void {
-        const { x, y } = particle.position;
         // Normalise the distance (it's a percentage)
         const bubbleDistance = distance / 100;
 
-        const diffX = x - hoverPosition.x;
-        const diffY = y - hoverPosition.y;
-
-        // Use Pythagoras theorem to get the distance
-        const positionDistance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+        const positionDistance = particle.position.distanceTo(hoverPosition);
 
         if (positionDistance <= bubbleDistance) {
             const ratio = 1 - (positionDistance / bubbleDistance);
@@ -133,7 +128,8 @@ export class ParticleManipulator {
         const positionDistance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
 
         if (positionDistance <= linkDistance) {
-            const lineColour = RGBAColour.fromHex(colourHex, opacity);
+            const ratio = 1 - positionDistance / linkDistance;
+            const lineColour = RGBAColour.fromHex(colourHex, ratio * opacity);
 
             this.canvas
                 .changeStrokeColour(lineColour.toString())

@@ -101,7 +101,7 @@ export class Subatomic {
         const deltaTime = this.lastFrameStart > 0 ? ((this.currentFrameStart - this.lastFrameStart) / 1000) : 0;
 
         this.particles.forEach((particle, key) => {
-            if (this.config.movement.enabled) {
+            if (this.config.movement) {
                 this.manipulator.moveParticle(particle, deltaTime, this.config.movement.bounce);
             }
 
@@ -142,6 +142,20 @@ export class Subatomic {
 
             if (particle.sizeAnimation !== undefined) {
                 this.manipulator.animateParticleSize(particle, deltaTime);
+            }
+
+            if (this.config.link) {
+                this.particles.forEach((otherParticle) => {
+                    const { distance, thickness, colour, opacity } = this.config.link;
+                    this.manipulator.linkParticle(
+                        particle,
+                        otherParticle.position,
+                        distance,
+                        thickness,
+                        colour,
+                        opacity
+                    );
+                });
             }
 
             particle.drawToCanvas(this.canvas);

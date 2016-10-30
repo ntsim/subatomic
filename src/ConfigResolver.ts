@@ -29,13 +29,21 @@ export class ConfigResolver {
      * @returns {SubatomicConfig.Root}
      */
     static resolve(config: SubatomicConfig.Root): SubatomicConfig.Root {
-        return {
-            link: handleLink(config.link),
-            movement: handleMovement(config.movement),
+        const resolvedConfig: SubatomicConfig.Root = {
             onClick: handleOnClick(config.onClick),
             onHover: handleOnHover(config.onHover),
             shapes: handleShapes(config.shapes),
         };
+
+        if (config.movement !== undefined) {
+            resolvedConfig.movement = deepMerge(DEFAULTS.MOVEMENT_DEFAULTS, config.movement);
+        }
+
+        if (config.link !== undefined) {
+            resolvedConfig.link = deepMerge(DEFAULTS.LINK_DEFAULTS, config.link);
+        }
+
+        return resolvedConfig;
     }
 }
 
@@ -75,20 +83,6 @@ function checkOscillatingAnimationSetting(animation: OscillatingAnimationSetting
     if (animation.min < 0) {
         throw new Error(`Config must provide a ${animProp}.min greater than 0.`);
     }
-}
-
-function handleMovement(movement: MovementSetting): MovementSetting {
-    if (movement === undefined) {
-        return {
-            enabled: false,
-        };
-    }
-
-    return deepMerge(DEFAULTS.MOVEMENT_DEFAULTS, movement);
-}
-
-function handleLink(link: LinkSetting): LinkSetting {
-    return deepMerge(DEFAULTS.LINK_DEFAULTS, link || {});
 }
 
 function handleOnHover(onHover: HoverInteractionSetting): HoverInteractionSetting {

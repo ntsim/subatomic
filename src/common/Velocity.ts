@@ -8,7 +8,7 @@ export class Velocity {
      * @returns {Velocity}
      */
     static fromConfig(movement: MovementSetting): Velocity {
-        if (!movement.enabled) {
+        if (!movement) {
             return new Velocity(0, 0);
         }
 

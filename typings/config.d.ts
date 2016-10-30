@@ -39,7 +39,6 @@ declare namespace SubatomicConfig {
     }
 
     export interface MovementSetting {
-        enabled?: boolean;
         direction?: 'none' |
             'top' |
             'top-right' |

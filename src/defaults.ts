@@ -17,7 +17,6 @@ export const SHAPE_DEFAULTS: ShapeSetting = {
 export const MOVEMENT_DEFAULTS: MovementSetting = {
     bounce: true,
     direction: 'none',
-    enabled: true,
     speed: 0.01,
     type: 'random',
 };
@@ -26,7 +25,7 @@ export const LINK_DEFAULTS: LinkInteractionSetting = {
     colour: '#ffffff',
     distance: 25,
     opacity: 0.5,
-    thickness: 2,
+    thickness: 1,
 };
 
 export const REPULSE_DEFAULTS: RepulseInteractionSetting = {
