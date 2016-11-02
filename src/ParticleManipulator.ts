@@ -6,28 +6,29 @@ export class ParticleManipulator {
     constructor(public canvas: Canvas) {}
 
     moveParticle(particle: Particle, deltaTime: number, canBounce: boolean): void {
-        let nextX = particle.position.x + (particle.velocity.x * deltaTime);
-        let nextY = particle.position.y + (particle.velocity.y * deltaTime);
+        const { size, position, velocity } = particle;
+
+        let nextX = position.x + (velocity.x * deltaTime);
+        let nextY = position.y + (velocity.y * deltaTime);
 
         // Keep track of if an edge was hit so that we can
         // swap the direction of the particle accordingly
         let xWasHit = false;
         let yWasHit = false;
 
-        const sizeRelativeX = particle.size / this.canvas.width;
-        const sizeRelativeY = particle.size / this.canvas.height;
+        const { width, height } = this.canvas;
 
         // We define the edges of the canvas as being +/- the particle radius so that
         // we either see the entire particle move off the canvas (for no bounce)
         // or see none of the particle move off the edge (for a bounce)
         const maxEdgeX =
-            canBounce ? 1 - sizeRelativeX : 1 + sizeRelativeX;
+            canBounce ? width - size : width + size;
         const minEdgeX =
-            canBounce ? sizeRelativeX : 0 - sizeRelativeX;
+            canBounce ? size : 0 - size;
         const maxEdgeY =
-            canBounce ? 1 - sizeRelativeY : 1 + sizeRelativeY;
+            canBounce ? height - size : height + size;
         const minEdgeY =
-            canBounce ? sizeRelativeY : 0 - sizeRelativeY;
+            canBounce ? size : 0 - size;
 
         if (nextX > maxEdgeX) {
             nextX = canBounce ? maxEdgeX : minEdgeX;
@@ -46,20 +47,18 @@ export class ParticleManipulator {
         }
 
         if (xWasHit) {
-            particle.velocity.x = canBounce ? -particle.velocity.x : particle.velocity.x;
+            velocity.x = canBounce ? -velocity.x : velocity.x;
         }
 
         if (yWasHit) {
-            particle.velocity.y = canBounce ? -particle.velocity.y : particle.velocity.y;
+            velocity.y = canBounce ? -velocity.y : velocity.y;
         }
 
-        particle.position.changeCoordinate(nextX, nextY);
+        position.changeCoordinate(nextX, nextY);
     }
 
-    repulseParticle(particle: Particle, repulsePosition: CanvasPosition, distance: number): void {
+    repulseParticle(particle: Particle, repulsePosition: CanvasPosition, repulseDistance: number): void {
         const { x, y } = particle.position;
-        // Normalise the distance (it's a percentage)
-        const repulseDistance = distance / 100;
 
         const diffX = x - repulsePosition.x;
         const diffY = y - repulsePosition.y;
@@ -78,9 +77,7 @@ export class ParticleManipulator {
         }
     }
 
-    clickRepulseParticle(particle: Particle, repulsePosition: CanvasPosition, distance: number): void {
-        const repulseDistance = distance / 100;
-
+    clickRepulseParticle(particle: Particle, repulsePosition: CanvasPosition, repulseDistance: number): void {
         const diffX = particle.position.x - repulsePosition.x;
         const diffY = particle.position.y - repulsePosition.y;
         const positionDistance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
@@ -96,10 +93,12 @@ export class ParticleManipulator {
         }
     }
 
-    bubbleParticle(particle: Particle, bubblePosition: CanvasPosition, distance: number, bubbleSize: number): void {
-        // Normalise the distance (it's a percentage)
-        const bubbleDistance = distance / 100;
-
+    bubbleParticle(
+        particle: Particle,
+        bubblePosition: CanvasPosition,
+        bubbleDistance: number,
+        bubbleSize: number
+    ): void {
         const positionDistance = particle.position.distanceTo(bubblePosition);
 
         if (positionDistance <= bubbleDistance) {
@@ -109,10 +108,8 @@ export class ParticleManipulator {
         }
     }
 
-    attractParticle(particle: Particle, attractPosition: CanvasPosition, distance: number): void {
+    attractParticle(particle: Particle, attractPosition: CanvasPosition, bubbleDistance: number): void {
         const { x, y } = particle.position;
-        // Normalise the distance (it's a percentage)
-        const bubbleDistance = distance / 100;
 
         const diffX = x - attractPosition.x;
         const diffY = y - attractPosition.y;
@@ -130,14 +127,12 @@ export class ParticleManipulator {
     linkParticle(
         particle: Particle,
         linkPosition: CanvasPosition,
-        distance: number,
+        linkDistance: number,
         thickness: number,
         colourHex: string,
         opacity: number
     ): void {
         const { x, y } = particle.position;
-        // Normalise the distance (it's a percentage)
-        const linkDistance = distance / 100;
 
         const diffX = x - linkPosition.x;
         const diffY = y - linkPosition.y;

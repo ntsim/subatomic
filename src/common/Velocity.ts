@@ -59,9 +59,7 @@ export class Velocity {
             baseY = baseY + (2 * Math.random()) - 1;
         }
 
-        const fractionalSpeed = movement.speed / 100;
-
-        return new Velocity(baseX * fractionalSpeed, baseY * fractionalSpeed);
+        return new Velocity(baseX * movement.speed, baseY * movement.speed);
     }
 
     constructor(public x: number, public y: number) {}

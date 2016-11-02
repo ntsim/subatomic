@@ -72,8 +72,8 @@ export class Canvas {
     ): this {
         return this.draw(() => {
             this.context.arc(
-                this.normalizeX(x),
-                this.normalizeY(y),
+                x,
+                y,
                 radius,
                 toRadians(startAngle),
                 toRadians(endAngle),
@@ -96,8 +96,8 @@ export class Canvas {
         height: number,
     ): this {
         return this.draw(() => {
-            const startX = this.normalizeX(x) - (width / 2);
-            const startY = this.normalizeY(y) - (width / 2);
+            const startX = x - (width / 2);
+            const startY = y - (width / 2);
             this.context.rect(startX, startY, width, height);
         });
     }
@@ -114,8 +114,8 @@ export class Canvas {
         this.context.lineWidth = thickness;
 
         return this.draw(() => {
-            this.context.moveTo(this.normalizeX(x1), this.normalizeY(y1));
-            this.context.lineTo(this.normalizeX(x2), this.normalizeY(y2));
+            this.context.moveTo(x1, y1);
+            this.context.lineTo(x2, y2);
             this.context.stroke();
         });
     }
@@ -139,13 +139,10 @@ export class Canvas {
         rotationAngle: number = 0,
         vertexAngle: number = 360 / sides,
     ) {
-        const canvasX = this.normalizeX(x);
-        const canvasY = this.normalizeY(y);
-
         this.context.save();
 
         this.draw(() => {
-            this.context.translate(canvasX, canvasY - radius);
+            this.context.translate(x, y - radius);
             this.context.rotate(toRadians(vertexAngle / 2));
             this.context.moveTo(0, 0);
 
@@ -164,8 +161,8 @@ export class Canvas {
     drawImage(x: number, y: number, image: HTMLImageElement, width?: number, height?: number) {
         return this.draw(() => this.context.drawImage(
             image,
-            this.normalizeX(x) - (0.5 * (width || image.width)),
-            this.normalizeY(y) - (0.5 * (height || image.height)),
+            x - (0.5 * (width || image.width)),
+            y - (0.5 * (height || image.height)),
             width || image.width,
             height || image.height
         ));
@@ -189,14 +186,6 @@ export class Canvas {
 
     set width(value: number) {
         this._element.width = value;
-    }
-
-    normalizeX(x: number): number {
-        return Math.round(x * this.width);
-    }
-
-    normalizeY(y: number): number {
-        return Math.round(y * this.height);
     }
 
     private draw(callback: () => void): this {

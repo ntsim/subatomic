@@ -9,7 +9,7 @@ export class SizeAnimation {
         max: number = 1,
         public reverse: boolean = false
     ) {
-        // Speed is a percentage (per frame) of the opacity animation range
+        // Speed is a percentage (per frame) of the size animation range
         this.speed = (max - min) * speed / 100;
         this.min = min;
         this.max = max;

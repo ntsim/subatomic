@@ -64,7 +64,7 @@ export abstract class Particle {
         // Feels a bit messy and probably should be improved (although not trivial
         // due to the way velocity is currently modelled).
         // TODO: Consider improving this further to get a more accurate movement.
-        if (this.targetDistance < 0.001) {
+        if (this.targetDistance < 1) {
             this.targetPosition = null;
             this.targetDistance = null;
 

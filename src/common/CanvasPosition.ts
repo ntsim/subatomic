@@ -11,24 +11,19 @@ export class CanvasPosition {
     static randomFrom2d(width: number, height: number, particleSize?: number) {
         const maxWidth = width - particleSize;
         const maxHeight = height - particleSize;
-        const relativeWidthSize = particleSize / width;
-        const relativeHeightSize = particleSize / height;
 
         // Generate a random coordinate
-        let x = Math.random();
-        let y = Math.random();
-
-        const normalX = Math.round(x * maxWidth);
-        const normalY = Math.round(y * maxHeight);
+        let x = Math.random() * width;
+        let y = Math.random() * height;
 
         if (particleSize) {
             // Make sure that the coordinate does not make an edge of any
             // particle fall outside of the actual canvas
-            x = (normalX + particleSize) > maxWidth ? x - relativeWidthSize : x;
-            y = (normalY + particleSize) > maxHeight ? y - relativeHeightSize : y;
+            x = (x + particleSize) > maxWidth ? x - particleSize : x;
+            y = (y + particleSize) > maxHeight ? y - particleSize : y;
 
-            x = (normalX - particleSize) < 0 ? x + relativeWidthSize : x;
-            y = (normalY - particleSize) < 0 ? y + relativeHeightSize : y;
+            x = (x - particleSize) < 0 ? x + particleSize : x;
+            y = (y - particleSize) < 0 ? y + particleSize : y;
         }
 
         return new CanvasPosition(x, y);
@@ -42,7 +37,7 @@ export class CanvasPosition {
     }
 
     distanceTo(otherPosition: CanvasPosition): number {
-        const diffX = this.x - otherPosition.x ;
+        const diffX = this.x - otherPosition.x;
         const diffY = this.y - otherPosition.y;
 
         // Use Pythagoras theorem to get the distance

@@ -32,13 +32,13 @@ export class InteractionListener {
     }
 
     private onMouseMove(e: MouseEvent): void {
-        this.hoverPosition.x = (e.offsetX || e.clientX) * window.devicePixelRatio / this.canvas.width;
-        this.hoverPosition.y = (e.offsetY || e.clientY) * window.devicePixelRatio / this.canvas.height;
+        this.hoverPosition.x = (e.offsetX || e.clientX) * window.devicePixelRatio;
+        this.hoverPosition.y = (e.offsetY || e.clientY) * window.devicePixelRatio;
     }
 
     private onMouseEnter(e: MouseEvent): void {
-        const x = (e.offsetX || e.clientX) * window.devicePixelRatio / this.canvas.width;
-        const y = (e.offsetY || e.clientY) * window.devicePixelRatio / this.canvas.height;
+        const x = (e.offsetX || e.clientX) * window.devicePixelRatio;
+        const y = (e.offsetY || e.clientY) * window.devicePixelRatio;
 
         if (!this.hoverPosition) {
             this.hoverPosition = new CanvasPosition(x, y);
@@ -54,8 +54,8 @@ export class InteractionListener {
     private onClick(e: MouseEvent): void {
         this.clickTime = Date.now();
 
-        const x = (e.offsetX || e.clientX) * window.devicePixelRatio / this.canvas.width;
-        const y = (e.offsetY || e.clientY) * window.devicePixelRatio / this.canvas.height;
+        const x = (e.offsetX || e.clientX) * window.devicePixelRatio;
+        const y = (e.offsetY || e.clientY) * window.devicePixelRatio;
 
         this.clickPosition = new CanvasPosition(x, y);
     }

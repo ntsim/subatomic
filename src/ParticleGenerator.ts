@@ -120,6 +120,7 @@ export class ParticleGenerator {
     }
 
     private generateCircle(size: number, colour: string, opacity: number): Circle {
+
         return new Circle(
             CanvasPosition.randomFrom2d(this.canvas.width, this.canvas.height, size),
             size,
