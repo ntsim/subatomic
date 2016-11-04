@@ -7,7 +7,7 @@
     "build": "webpack --progress",
     "dev:server": "webpack-dev-server",
     "lint": "tslint src/**/*.ts typings/**/*.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --compilers ts:ts-node/register test/**/*.test.ts"
   },
   "keywords": [
     "particles"
@@ -15,9 +15,14 @@
   "author": "Nicholas Tsim <nicholastsim@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/mocha": "^2.2.32",
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2",
     "object.assign": "^4.0.4",
     "raf": "^3.3.0",
     "ts-loader": "^0.9.1",
+    "ts-node": "^1.6.1",
     "tslint": "^3.15.1",
     "tslint-loader": "^2.1.5",
     "typescript": "^2.0.3",
