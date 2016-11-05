@@ -7,7 +7,8 @@
     "build": "webpack --progress",
     "dev:server": "webpack-dev-server",
     "lint": "tslint src/**/*.ts typings/**/*.ts",
-    "test": "mocha --compilers ts:ts-node/register test/**/*.test.ts"
+    "test": "mocha --compilers ts:ts-node/register test/**/*.test.ts",
+    "test:watch": "mocha --compilers ts:ts-node/register test/**/*.test.ts --watch"
   },
   "keywords": [
     "particles"
@@ -17,10 +18,12 @@
   "devDependencies": {
     "@types/chai": "^3.4.34",
     "@types/mocha": "^2.2.32",
+    "@types/sinon": "^1.16.31",
     "chai": "^3.5.0",
     "mocha": "^3.1.2",
     "object.assign": "^4.0.4",
     "raf": "^3.3.0",
+    "sinon": "^1.17.6",
     "ts-loader": "^0.9.1",
     "ts-node": "^1.6.1",
     "tslint": "^3.15.1",
